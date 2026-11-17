@@ -1,1240 +1,374 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en" class="scroll-smooth">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>THE GRIMOIRE OF SUBCULTURES | Alternative Fashion Archive</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Cinzel Decorative, UnifrakturMaguntia, & Inter -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Inter:wght@300;400;600;700&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
-    <!-- Font Awesome for Gothic/Grunge Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Natalys CS Portfolio</title>
+  
+  <!-- Google Fonts for Gothic Aesthetic -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS for Layout -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <style>
+    /* Strict Color Palette Setup */
+    :root {
+      --void: #121111;
+      --coven: #160c1f;
+      --amethyst: #2f1745;
+      --violet: #5f02d1;
+      --dried-blood: #380707;
+      --maroon: #4a1e1c;
+      
+      /* Text colors derived for readability */
+      --text-main: #d8cce6;
+      --text-muted: #8b79a5;
+    }
+
+    body {
+      background-color: var(--void);
+      color: var(--text-main);
+      font-family: 'Space Mono', monospace;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    h1, h2, h3, .gothic-text {
+      font-family: 'Cinzel', serif;
+    }
+
+    /* Distressed Grunge Texture Overlay */
+    .grunge-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 50;
+      opacity: 0.15;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+      mix-blend-mode: overlay;
+    }
+
+    /* Custom Selection */
+    ::selection {
+      background: var(--violet);
+      color: #fff;
+    }
+
+    /* Arcane Glowing Elements */
+    .rune-glow {
+      text-shadow: 0 0 10px var(--violet), 0 0 20px var(--violet);
+    }
     
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        voidBlack: '#121111',
-                        abyssalPurple: '#160c1f',
-                        witchPlum: '#2f1745',
-                        bloodWine: '#380707',
-                        rustVelvet: '#4a1e1c',
-                        arcaneViolet: '#5f02d1',
-                    },
-                    fontFamily: {
-                        gothic: ['"UnifrakturMaguntia"', 'cursive'],
-                        cinzel: ['"Cinzel Decorative"', 'serif'],
-                        sans: ['"Inter"', 'sans-serif'],
-                    },
-                    backgroundImage: {
-                        'grunge-noise': "url('data:image/svg+xml,%3Csvg viewBox=\"0 0 200 200\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cfilter id=\"noiseFilter\"%3E%3CfeTurbulence type=\"fractalNoise\" baseFrequency=\"0.85\" numOctaves=\"3\" stitchTiles=\"stitch\"/%3E%3C/filter%3E%3Crect width=\"100%25\" height=\"100%25\" filter=\"url(%23noiseFilter)\" opacity=\"0.07\"/%3E%3C/svg%3E')",
-                        'dark-leopard': "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='none'%3E%3Cpath d='M25 18c-6 0-11 4-11 10s4 11 10 11c5 0 11-3 12-9 1-6-5-12-11-12z' stroke='%23121111' stroke-width='4.5' stroke-linecap='round' stroke-dasharray='18 6 12 5'/%3E%3Ccircle cx='24' cy='28' r='4.5' fill='%234a1e1c' opacity='0.75'/%3E%3Cpath d='M82 14c-7 1-12 6-11 12 1 6 7 10 14 9 6-1 10-7 9-13-1-5-6-9-12-8z' stroke='%23121111' stroke-width='5' stroke-linecap='round' stroke-dasharray='22 7 14 6'/%3E%3Ccircle cx='83' cy='25' r='5' fill='%235f02d1' opacity='0.45'/%3E%3Cpath d='M52 54c-6 0-12 5-11 11 1 6 6 10 12 10s11-5 11-11c0-6-6-10-12-10z' stroke='%23121111' stroke-width='4.5' stroke-linecap='round' stroke-dasharray='16 6 15 5'/%3E%3Ccircle cx='52' cy='64' r='4.5' fill='%23380707' opacity='0.85'/%3E%3Cpath d='M18 86c-6 1-10 6-9 12 1 6 7 9 13 8 6-1 9-6 8-12-1-5-6-9-12-8z' stroke='%23121111' stroke-width='4.5' stroke-linecap='round' stroke-dasharray='19 6 11 5'/%3E%3Ccircle cx='19' cy='96' r='4' fill='%235f02d1' opacity='0.4'/%3E%3Cpath d='M92 78c-7 0-13 5-12 12 1 6 7 11 13 10 7-1 11-6 10-12-1-6-5-10-11-10z' stroke='%23121111' stroke-width='5' stroke-linecap='round' stroke-dasharray='20 7 13 6'/%3E%3Ccircle cx='92' cy='89' r='5' fill='%234a1e1c' opacity='0.75'/%3E%3Ccircle cx='54' cy='22' r='3' fill='%23121111'/%3E%3Ccircle cx='14' cy='58' r='3.5' fill='%23121111'/%3E%3Ccircle cx='106' cy='52' r='3' fill='%23121111'/%3E%3Ccircle cx='58' cy='102' r='3.5' fill='%23121111'/%3E%3C/g%3E%3C/svg%3E\")",
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        /* Custom Scrollbar & Subtle Grunge Details */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #121111;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #2f1745;
-            border-radius: 4px;
-            border: 1px solid #5f02d1;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #5f02d1;
-        }
-        .text-glow {
-            text-shadow: 0 0 15px rgba(95, 2, 209, 0.7), 0 0 30px rgba(95, 2, 209, 0.4);
-        }
-        .blood-glow {
-            text-shadow: 0 0 12px rgba(74, 30, 28, 0.9);
-        }
-        .card-border {
-            box-shadow: inset 0 0 20px rgba(22, 12, 31, 0.9), 0 10px 30px -10px rgba(0, 0, 0, 0.8);
-        }
-        .card-border:hover {
-            box-shadow: inset 0 0 25px rgba(95, 2, 209, 0.25), 0 10px 35px -5px rgba(95, 2, 209, 0.35);
-        }
-        /* Leopard Trim & Subtle Texture Overlays */
-        .leopard-trim {
-            background-color: #2f1745;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90' viewBox='0 0 120 120'%3E%3Cg fill='none'%3E%3Cpath d='M25 18c-6 0-11 4-11 10s4 11 10 11c5 0 11-3 12-9 1-6-5-12-11-12z' stroke='%23121111' stroke-width='5' stroke-linecap='round' stroke-dasharray='18 6 12 5'/%3E%3Ccircle cx='24' cy='28' r='4.5' fill='%234a1e1c'/%3E%3Cpath d='M82 14c-7 1-12 6-11 12 1 6 7 10 14 9 6-1 10-7 9-13-1-5-6-9-12-8z' stroke='%23121111' stroke-width='5.5' stroke-linecap='round' stroke-dasharray='22 7 14 6'/%3E%3Ccircle cx='83' cy='25' r='5' fill='%235f02d1' opacity='0.65'/%3E%3Cpath d='M52 54c-6 0-12 5-11 11 1 6 6 10 12 10s11-5 11-11c0-6-6-10-12-10z' stroke='%23121111' stroke-width='5' stroke-linecap='round' stroke-dasharray='16 6 15 5'/%3E%3Ccircle cx='52' cy='64' r='4.5' fill='%23380707'/%3E%3Cpath d='M18 86c-6 1-10 6-9 12 1 6 7 9 13 8 6-1 9-6 8-12-1-5-6-9-12-8z' stroke='%23121111' stroke-width='5' stroke-linecap='round' stroke-dasharray='19 6 11 5'/%3E%3Ccircle cx='19' cy='96' r='4' fill='%235f02d1' opacity='0.6'/%3E%3Cpath d='M92 78c-7 0-13 5-12 12 1 6 7 11 13 10 7-1 11-6 10-12-1-6-5-10-11-10z' stroke='%23121111' stroke-width='5.5' stroke-linecap='round' stroke-dasharray='20 7 13 6'/%3E%3Ccircle cx='92' cy='89' r='5' fill='%234a1e1c'/%3E%3C/g%3E%3C/svg%3E");
-        }
-    </style>
+    .blood-glow {
+      text-shadow: 0 0 10px var(--dried-blood), 0 0 20px var(--maroon);
+    }
+
+    /* Floating Embers Animation */
+    .ember {
+      position: absolute;
+      bottom: -20px;
+      width: 4px;
+      height: 4px;
+      background-color: var(--violet);
+      border-radius: 50%;
+      pointer-events: none;
+      opacity: 0;
+      box-shadow: 0 0 8px 2px var(--violet);
+      animation: floatUp linear infinite;
+      z-index: 10;
+    }
+
+    .ember.blood {
+      background-color: var(--dried-blood);
+      box-shadow: 0 0 8px 2px var(--maroon);
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) translateX(0) scale(1);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.8;
+      }
+      50% {
+        transform: translateY(-50vh) translateX(20px) scale(0.5);
+      }
+      100% {
+        transform: translateY(-100vh) translateX(-20px) scale(0);
+        opacity: 0;
+      }
+    }
+
+    /* Witchy UI Components */
+    .spell-card {
+      background-color: var(--coven);
+      border: 1px solid var(--amethyst);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .spell-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--violet), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .spell-card:hover {
+      border-color: var(--violet);
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px -10px rgba(95, 2, 209, 0.4);
+    }
+
+    .spell-card:hover::before {
+      opacity: 1;
+    }
+
+    .filter-btn {
+      background: transparent;
+      border: 1px solid var(--amethyst);
+      color: var(--text-muted);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .filter-btn:hover {
+      border-color: var(--maroon);
+      color: var(--text-main);
+      box-shadow: inset 0 0 15px rgba(74, 30, 28, 0.5);
+    }
+
+    .filter-btn.active {
+      background: var(--maroon);
+      border-color: var(--dried-blood);
+      color: #fff;
+      box-shadow: 0 0 15px rgba(56, 7, 7, 0.8);
+      font-weight: bold;
+    }
+
+    /* Decorative Arcane Lines */
+    .arcane-divider {
+      height: 1px;
+      width: 100%;
+      background: linear-gradient(90deg, transparent, var(--violet), var(--amethyst), transparent);
+      margin: 2rem 0;
+    }
+  </style>
 </head>
-<body class="bg-voidBlack text-gray-200 font-sans antialiased min-h-screen relative overflow-x-hidden selection:bg-arcaneViolet selection:text-white">
+<body class="min-h-screen flex flex-col items-center p-6 md:p-12">
+  
+  <!-- Texture Overlay -->
+  <div class="grunge-overlay"></div>
+  
+  <!-- Container for Embers -->
+  <div id="ember-container" class="fixed inset-0 pointer-events-none z-0 overflow-hidden"></div>
 
-    <!-- Noise Overlay for Grunge Texture -->
-    <div class="fixed inset-0 bg-grunge-noise pointer-events-none z-50"></div>
-
-    <!-- Subtle Dark Leopard Ambient Overlay -->
-    <div class="fixed inset-0 bg-dark-leopard opacity-35 pointer-events-none z-0"></div>
-
-    <!-- Ambient Radial Glows -->
-    <div class="fixed top-[-10%] left-[-10%] w-[45vw] h-[45vw] rounded-full bg-witchPlum/30 blur-[120px] pointer-events-none z-0"></div>
-    <div class="fixed bottom-[-10%] right-[-10%] w-[40vw] h-[40vw] rounded-full bg-bloodWine/40 blur-[120px] pointer-events-none z-0"></div>
-
-    <!-- Leopard Top Ribbon -->
-    <div class="relative z-20 h-2.5 w-full leopard-trim border-b border-arcaneViolet/50"></div>
-
-    <!-- Header / Hero Section -->
-    <header class="relative z-10 border-b border-witchPlum/60 bg-gradient-to-b from-abyssalPurple/95 via-voidBlack/90 to-voidBlack/95 pt-12 pb-10 px-4 sm:px-8 overflow-hidden">
-        <!-- Decorative Leopard Corner Accent -->
-        <div class="absolute inset-0 bg-dark-leopard opacity-25 pointer-events-none"></div>
-        <div class="relative z-10 max-w-7xl mx-auto text-center">
-            <div class="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-witchPlum/40 border border-arcaneViolet/40 text-xs uppercase tracking-[0.25em] text-purple-300 mb-6">
-                <i class="fa-solid fa-moon text-arcaneViolet"></i>
-                <span>The Complete Subculture Compendium</span>
-                <i class="fa-solid fa-spider text-arcaneViolet"></i>
-            </div>
-            
-            <h1 class="font-gothic text-5xl sm:text-7xl md:text-8xl text-white tracking-wider text-glow mb-4">
-                Nocturnal &amp; Rogue
-            </h1>
-            <p class="font-cinzel text-sm sm:text-lg md:text-xl text-purple-200/80 tracking-widest uppercase max-w-3xl mx-auto mb-8">
-                An Encyclopedia of Alternative Fashion Subcultures, Sacred Relics &amp; Ritualistic Makeup
-            </p>
-
-            <!-- Search & Filter Bar -->
-            <div class="max-w-4xl mx-auto bg-abyssalPurple/90 border border-witchPlum rounded-2xl p-4 shadow-2xl backdrop-blur-md">
-                <div class="flex flex-col md:flex-row gap-4">
-                    <!-- Search Input -->
-                    <div class="relative flex-1">
-                        <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-purple-400"></i>
-                        <input 
-                            type="text" 
-                            id="searchInput" 
-                            placeholder="Search subcultures, accessories (e.g., ankhs, safety pins), or makeup..." 
-                            class="w-full bg-voidBlack/80 border border-witchPlum focus:border-arcaneViolet rounded-xl py-3 pl-11 pr-4 text-sm text-gray-100 placeholder-gray-500 outline-none transition-all"
-                        >
-                    </div>
-                    <!-- Saved Lookbook Button -->
-                    <button 
-                        id="openGrimoireBtn"
-                        class="flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-witchPlum to-bloodWine hover:from-arcaneViolet hover:to-rustVelvet border border-arcaneViolet/50 text-white font-semibold text-sm tracking-wider uppercase transition-all shadow-lg cursor-pointer"
-                    >
-                        <i class="fa-solid fa-book-skull"></i>
-                        <span>Saved Grimoire (<span id="savedCount">0</span>)</span>
-                    </button>
-                </div>
-
-                <!-- Category Filter Pills -->
-                <div id="categoryFilters" class="flex flex-wrap items-center justify-center gap-2 mt-4 pt-4 border-t border-witchPlum/40">
-                    <button data-filter="all" class="filter-btn active px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-arcaneViolet text-white border border-arcaneViolet transition-all cursor-pointer">
-                        All Realms (27)
-                    </button>
-                    <button data-filter="goth" class="filter-btn px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-voidBlack/60 text-gray-300 hover:text-white border border-witchPlum hover:border-arcaneViolet transition-all cursor-pointer">
-                        Goth &amp; Darkwave
-                    </button>
-                    <button data-filter="witchy" class="filter-btn px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-voidBlack/60 text-gray-300 hover:text-white border border-witchPlum hover:border-arcaneViolet transition-all cursor-pointer">
-                        Witchy &amp; Ethereal
-                    </button>
-                    <button data-filter="grunge" class="filter-btn px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-voidBlack/60 text-gray-300 hover:text-white border border-witchPlum hover:border-arcaneViolet transition-all cursor-pointer">
-                        Grunge &amp; Punk
-                    </button>
-                    <button data-filter="emo-y2k" class="filter-btn px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-voidBlack/60 text-gray-300 hover:text-white border border-witchPlum hover:border-arcaneViolet transition-all cursor-pointer">
-                        Emo, Scene &amp; Y2K
-                    </button>
-                    <button data-filter="gyaru" class="filter-btn px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-voidBlack/60 text-gray-300 hover:text-white border border-witchPlum hover:border-arcaneViolet transition-all cursor-pointer">
-                        Gyaru Realms
-                    </button>
-                    <button data-filter="industrial" class="filter-btn px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-voidBlack/60 text-gray-300 hover:text-white border border-witchPlum hover:border-arcaneViolet transition-all cursor-pointer">
-                        Cyber &amp; Industrial
-                    </button>
-                    <button data-filter="jfashion" class="filter-btn px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-voidBlack/60 text-gray-300 hover:text-white border border-witchPlum hover:border-arcaneViolet transition-all cursor-pointer">
-                        Dark J-Fashion &amp; Kei
-                    </button>
-                </div>
-            </div>
-        </div>
+  <main class="w-full max-w-5xl relative z-20 flex flex-col gap-12">
+    
+    <!-- Header Section -->
+    <header class="text-center py-12 border-b border-[#2f1745] relative">
+      <!-- SVG Pentagram / Arcane symbol decorative -->
+      <div class="absolute top-0 left-1/2 -translate-x-1/2 opacity-10 pointer-events-none">
+        <svg width="200" height="200" viewBox="0 0 100 100" fill="none" stroke="var(--violet)" stroke-width="0.5">
+          <circle cx="50" cy="50" r="45"/>
+          <circle cx="50" cy="50" r="35"/>
+          <polygon points="50,15 79,90 15,43 85,43 21,90" />
+        </svg>
+      </div>
+      
+      <h1 class="text-5xl md:text-7xl font-black rune-glow mb-4 tracking-wider text-white uppercase">
+        Natalys CS Portfolio
+      </h1>
+      <p class="text-xl text-[#8b79a5] italic gothic-text tracking-widest mt-4">
+        Weaving Code & Shadows
+      </p>
+      <div class="arcane-divider max-w-md mx-auto"></div>
     </header>
 
-    <!-- Main Subculture Grid -->
-    <main class="relative z-10 max-w-7xl mx-auto px-4 sm:px-8 py-12">
-        <!-- Results Counter -->
-        <div class="flex items-center justify-between mb-6 text-xs uppercase tracking-widest text-gray-400">
-            <span id="resultsLabel">Displaying all 27 Subcultures</span>
-            <span class="hidden sm:inline text-purple-400"><i class="fa-solid fa-wand-sparkles mr-1"></i> Click any card to inspect full makeup &amp; accessory rituals</span>
-        </div>
+    <!-- About Me Section -->
+    <section class="spell-card p-8 rounded-sm">
+      <h2 class="text-3xl font-bold mb-4 blood-glow text-white">About the Caster</h2>
+      <p class="text-[#d8cce6] leading-relaxed mb-4">
+        I am a digital architect navigating the ethereal realms of computer science. My work explores the intersection of dark aesthetics and modern logic. Here lies my grimoire—a collection of simulations, interfaces, and interactive experiences forged in the glow of the screen.
+      </p>
+      <p class="text-[#8b79a5] text-sm">
+        > Specializing in: Web Technologies, Dark UI/UX, and Algorithmic Witchcraft.
+      </p>
+    </section>
 
-        <!-- Grid Container -->
-        <div id="subcultureGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- Cards injected via JavaScript -->
-        </div>
+    <!-- Grimoire of Works (Projects) Section -->
+    <section>
+      <h2 class="text-4xl font-bold mb-8 text-center rune-glow text-white">Grimoire of Works</h2>
+      
+      <!-- Filters -->
+      <div class="flex flex-wrap justify-center gap-4 mb-10" id="filter-container">
+        <button class="filter-btn active px-6 py-2 uppercase tracking-widest text-xs rounded-sm" data-filter="All">All</button>
+        <button class="filter-btn px-6 py-2 uppercase tracking-widest text-xs rounded-sm" data-filter="Sims">Sims (simulations)</button>
+        <button class="filter-btn px-6 py-2 uppercase tracking-widest text-xs rounded-sm" data-filter="Sites">Sites (websites)</button>
+        <button class="filter-btn px-6 py-2 uppercase tracking-widest text-xs rounded-sm" data-filter="Games">Games</button>
+        <button class="filter-btn px-6 py-2 uppercase tracking-widest text-xs rounded-sm" data-filter="Other">Other</button>
+      </div>
 
-        <!-- Empty State -->
-        <div id="emptyState" class="hidden text-center py-20 bg-abyssalPurple/40 rounded-3xl border border-witchPlum/50">
-            <i class="fa-solid fa-ghost text-5xl text-witchPlum mb-4"></i>
-            <h3 class="font-cinzel text-2xl text-white mb-2">No Spirits Found in the Void</h3>
-            <p class="text-gray-400 text-sm mb-6">Try searching for another subculture, accessory, or makeup style.</p>
-            <button id="resetSearchBtn" class="px-6 py-2.5 rounded-xl bg-arcaneViolet text-white text-xs uppercase tracking-widest font-semibold hover:bg-purple-700 transition-all cursor-pointer">
-                Restore All Subcultures
-            </button>
-        </div>
-    </main>
+      <!-- Gallery Grid -->
+      <div id="gallery" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Projects injected via JS -->
+      </div>
+    </section>
 
-    <!-- Detailed Modal for Subculture Inspection -->
-    <div id="detailModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/85 backdrop-blur-md overflow-y-auto">
-        <div class="relative w-full max-w-4xl bg-gradient-to-br from-abyssalPurple via-voidBlack to-bloodWine/30 border-2 border-witchPlum rounded-3xl shadow-2xl overflow-hidden my-8">
-            <!-- Leopard Accent Strip on Modal -->
-            <div class="h-2 w-full leopard-trim border-b border-arcaneViolet/40"></div>
-            <!-- Top Modal Banner -->
-            <div class="bg-gradient-to-r from-witchPlum/80 via-abyssalPurple to-rustVelvet/80 px-6 py-5 border-b border-witchPlum flex items-center justify-between">
-                <div class="flex items-center gap-3">
-                    <span id="modalIcon" class="w-10 h-10 rounded-xl bg-voidBlack/80 border border-arcaneViolet flex items-center justify-center text-arcaneViolet text-lg"></span>
-                    <div>
-                        <span id="modalCategory" class="text-[11px] uppercase tracking-[0.2em] text-purple-300 block"></span>
-                        <h2 id="modalTitle" class="font-cinzel text-2xl sm:text-3xl font-bold text-white"></h2>
-                    </div>
-                </div>
-                <button id="closeModalBtn" class="w-10 h-10 rounded-full bg-voidBlack/70 hover:bg-rustVelvet border border-witchPlum text-gray-300 hover:text-white flex items-center justify-center transition-all cursor-pointer">
-                    <i class="fa-solid fa-xmark text-lg"></i>
-                </button>
-            </div>
-
-            <!-- Modal Body -->
-            <div class="p-6 sm:p-8 space-y-8 max-h-[78vh] overflow-y-auto">
-                <!-- Era & Essence -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div class="md:col-span-2 bg-voidBlack/60 border border-witchPlum/60 rounded-2xl p-5">
-                        <h4 class="text-xs uppercase tracking-widest text-purple-400 font-bold mb-2">
-                            <i class="fa-solid fa-scroll mr-1.5"></i> Essence &amp; Aesthetic Origins
-                        </h4>
-                        <p id="modalDescription" class="text-gray-300 text-sm leading-relaxed"></p>
-                    </div>
-                    <div class="bg-bloodWine/25 border border-rustVelvet/60 rounded-2xl p-5 flex flex-col justify-between">
-                        <div>
-                            <h4 class="text-xs uppercase tracking-widest text-red-300 font-bold mb-2">
-                                <i class="fa-solid fa-hourglass-half mr-1.5"></i> Era &amp; Key Textures
-                            </h4>
-                            <p id="modalEra" class="text-white font-semibold text-sm mb-3"></p>
-                            <div id="modalFabrics" class="flex flex-wrap gap-1.5"></div>
-                        </div>
-                        <button id="modalSaveBtn" class="mt-4 w-full py-2.5 px-4 rounded-xl bg-witchPlum hover:bg-arcaneViolet border border-arcaneViolet/50 text-white text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer">
-                            <i class="fa-regular fa-bookmark"></i> <span>Save to Grimoire</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Two Column Breakdown: Accessories & Makeup -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Accessories Section -->
-                    <div class="bg-abyssalPurple/70 border border-witchPlum rounded-2xl p-6">
-                        <div class="flex items-center gap-2.5 mb-4 pb-3 border-b border-witchPlum/50">
-                            <i class="fa-solid fa-ring text-arcaneViolet text-xl"></i>
-                            <h3 class="font-cinzel text-lg font-bold text-white">Signature Accessories &amp; Hardware</h3>
-                        </div>
-                        <ul id="modalAccessories" class="space-y-3 text-sm text-gray-300">
-                            <!-- List items injected via JS -->
-                        </ul>
-                    </div>
-
-                    <!-- Makeup Section -->
-                    <div class="bg-rustVelvet/20 border border-rustVelvet/80 rounded-2xl p-6">
-                        <div class="flex items-center gap-2.5 mb-4 pb-3 border-b border-rustVelvet/60">
-                            <i class="fa-solid fa-eye text-red-400 text-xl"></i>
-                            <h3 class="font-cinzel text-lg font-bold text-white">Ritualistic Makeup &amp; Hair</h3>
-                        </div>
-                        <ul id="modalMakeup" class="space-y-3 text-sm text-gray-300">
-                            <!-- List items injected via JS -->
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Signature Outfit Formula -->
-                <div class="bg-gradient-to-r from-witchPlum/40 via-voidBlack to-bloodWine/40 border border-arcaneViolet/40 rounded-2xl p-5">
-                    <h4 class="text-xs uppercase tracking-widest text-purple-300 font-bold mb-2">
-                        <i class="fa-solid fa-shirt mr-1.5"></i> The Archetype Silhouette Formula
-                    </h4>
-                    <p id="modalOutfit" class="text-gray-200 text-sm italic"></p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Saved Grimoire Drawer Modal -->
-    <div id="grimoireModal" class="fixed inset-0 z-50 hidden items-center justify-end bg-black/80 backdrop-blur-sm">
-        <div class="w-full max-w-md h-full bg-abyssalPurple border-l-2 border-witchPlum p-6 flex flex-col justify-between overflow-y-auto shadow-2xl">
-            <div>
-                <div class="flex items-center justify-between pb-4 border-b border-witchPlum">
-                    <div class="flex items-center gap-2">
-                        <i class="fa-solid fa-book-skull text-arcaneViolet text-xl"></i>
-                        <h3 class="font-cinzel text-xl font-bold text-white">Your Saved Grimoire</h3>
-                    </div>
-                    <button id="closeGrimoireBtn" class="w-9 h-9 rounded-full bg-voidBlack text-gray-400 hover:text-white flex items-center justify-center cursor-pointer">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
-                </div>
-                <p class="text-xs text-gray-400 mt-3 mb-6">Your curated dark aesthetic inspirations. Saved locally in your browser.</p>
-                
-                <div id="savedList" class="space-y-3">
-                    <!-- Saved items injected here -->
-                </div>
-            </div>
-
-            <div class="pt-4 border-t border-witchPlum mt-6">
-                <button id="clearGrimoireBtn" class="w-full py-2.5 rounded-xl bg-bloodWine/60 hover:bg-bloodWine border border-rustVelvet text-red-200 text-xs uppercase tracking-widest font-semibold transition-all cursor-pointer">
-                    Banish All Saved Looks
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Toast Notification -->
-    <div id="toast" class="fixed bottom-6 right-6 z-50 translate-y-24 opacity-0 transition-all duration-300 bg-witchPlum border border-arcaneViolet text-white px-5 py-3 rounded-xl shadow-2xl flex items-center gap-3 text-sm">
-        <i class="fa-solid fa-sparkles text-arcaneViolet"></i>
-        <span id="toastMsg">Added to your Grimoire</span>
-    </div>
-
-    <!-- Footer -->
-    <footer class="relative z-10 border-t border-witchPlum/50 bg-voidBlack overflow-hidden">
-        <div class="h-2.5 w-full leopard-trim border-b border-witchPlum/60"></div>
-        <div class="relative py-10 px-4 text-center">
-            <div class="absolute inset-0 bg-dark-leopard opacity-20 pointer-events-none"></div>
-            <div class="relative z-10">
-                <p class="font-gothic text-2xl text-purple-300 mb-2">Nocturnal &amp; Rogue</p>
-                <p class="text-xs text-gray-500 uppercase tracking-widest">Curated for the creatures of the night, the grunge rebels, and the modern witches.</p>
-            </div>
-        </div>
+    <footer class="mt-20 text-center text-[#8b79a5] text-xs pb-8 border-t border-[#2f1745] pt-8">
+      <p>© Natalys CS Portfolio. Crafted in the void.</p>
     </footer>
 
-    <!-- Application Logic & Subculture Database -->
-    <script>
-        const subcultures = [
-            {
-                id: 'trad-goth',
-                name: 'Trad Goth (Traditional Goth)',
-                category: 'goth',
-                categoryLabel: 'Goth & Darkwave',
-                icon: 'fa-bat',
-                era: 'Late 1970s – Early 1980s (Post-Punk Roots)',
-                fabrics: ['Fishnet', 'Distressed Lace', 'Leather', 'Velvet', 'Sheer Mesh'],
-                summary: 'Born from the post-punk clubs like London’s Batcave, Trad Goth celebrates theatrical darkness, angular silhouettes, and DIY rebellion.',
-                accessories: [
-                    'Oversized silver Egyptian Ankhs, rosary beads, and Maltese crosses',
-                    'Layered studded leather chokers and O-ring bondage collars',
-                    'Torn fishnet tights worn as tops/sleeves with fingerless lace gloves',
-                    'Pointed-toe winklepicker boots with multiple buckles',
-                    'Silver spiderweb earrings and bat-shaped hair clips'
-                ],
-                makeup: [
-                    'Stark, matte porcelain-white foundation base with sharp grey/taupe cheek contouring',
-                    'Dramatic, razor-sharp winged eyeliner extending toward the temples ("bat-wing" liner)',
-                    'High-arched, thin, or razor-drawn angular eyebrows',
-                    'Deep black, dried-blood burgundy, or dark plum matte lipstick'
-                ],
-                outfit: 'Backcombed teased "deathhawk" hair paired with a ripped fishnet top, thrifted vintage velvet blazer, layered silver talismans, and buckled winklepickers.'
-            },
-            {
-                id: 'whimsigoth',
-                name: 'Whimsigoth & Celestial Witch',
-                category: 'witchy',
-                categoryLabel: 'Witchy & Ethereal',
-                icon: 'fa-moon',
-                era: '1990s Mystical Revival',
-                fabrics: ['Crushed Velvet', 'Burnout Silk', 'Chiffon', 'Crochet', 'Satin'],
-                summary: 'A cozy yet enchanting fusion of 90s bohemian witchiness, celestial motifs, and rich jewel-toned romance.',
-                accessories: [
-                    'Crescent moon, sun, and star celestial charm necklaces',
-                    'Raw crystal pendants (amethyst, labradorite, black tourmaline) wrapped in tarnished silver',
-                    'Chunky oxidized silver midi rings and gemstone statement rings',
-                    'Flowing sheer kimono shawls with fringed edges and velvet hair scrunchies',
-                    'Round wire-rimmed tinted sunglasses (purple or amber lenses)'
-                ],
-                makeup: [
-                    'Luminous, dewy skin with subtle violet or bronze highlighter on cheekbones',
-                    'Smudged plum, eggplant, and warm burgundy eyeshadow with a touch of celestial shimmer',
-                    'Soft brown or dark berry kohl liner smudged along the waterline',
-                    'Iconic 90s "vamp" lip: dark brown-berry lip liner blended into sheer blackberry gloss'
-                ],
-                outfit: 'A crushed violet velvet maxi skirt, sheer burnout floral bell-sleeve blouse, layered moon phase chains, and platform Mary Janes.'
-            },
-            {
-                id: '90s-grunge',
-                name: '90s Seattle Grunge & Kinderwhore',
-                category: 'grunge',
-                categoryLabel: 'Grunge & Punk',
-                icon: 'fa-guitar',
-                era: 'Early-to-Mid 1990s',
-                fabrics: ['Heavy Flannel', 'Ripped Denim', 'Mohair', 'Babydoll Cotton', 'Distressed Wool'],
-                summary: 'Anti-fashion apathy meets raw emotional intensity—mixing oversized thrift-store layers with hyper-feminine vintage dresses.',
-                accessories: [
-                    'Tarnished ball-chain dog tag necklaces and safety-pin earrings',
-                    'Laddered, ripped black tights layered over wool crew socks',
-                    'Scuffed combat boots (Doc Martens) or worn-out low-top canvas sneakers',
-                    'Vintage plastic barrettes, mini tiaras (Kinderwhore), and oval Kurt Cobain sunglasses',
-                    'Canvas messenger bags covered in band patches and sharpie doodles'
-                ],
-                makeup: [
-                    '"Slept-in" lived-in makeup: smudged black kohl eyeliner rubbed into the lash line',
-                    'Bare, un-contoured skin with visible freckles or dark under-eye circles embraced',
-                    'Messy, blotted crimson or dark rust-red lipstick worn without liner',
-                    'Natural, unplucked eyebrows and tousled, bedhead roots'
-                ],
-                outfit: 'A vintage satin babydoll slip dress layered under an oversized plaid flannel shirt, ripped fishnets, and scuffed combat boots.'
-            },
-            {
-                id: 'romantic-goth',
-                name: 'Romantic & Victorian Goth',
-                category: 'goth',
-                categoryLabel: 'Goth & Darkwave',
-                icon: 'fa-rose',
-                era: '1980s – Present (Victorian & Gothic Literature Inspired)',
-                fabrics: ['Brocade', 'Heavy Velvet', 'Chantilly Lace', 'Taffeta', 'Silk'],
-                summary: 'Opulent, melancholic, and poetic. Inspired by Bram Stoker’s Dracula, Anne Rice vampires, and Victorian mourning rituals.',
-                accessories: [
-                    'Victorian cameo brooches, velvet ribbon chokers, and ornate lockets',
-                    'Lace parasols, elbow-length fingerless lace gloves, and hand fans',
-                    'Intricate filigree silver rings, poison rings with secret compartments, and drop pearl/garnet earrings',
-                    'Lace-up Victorian granny boots with curved Louis heels'
-                ],
-                makeup: [
-                    'Velvety, porcelain-pale complexion with soft dusty rose or plum blush',
-                    'Smoky charcoal, deep burgundy, and antique gold eyeshadow blended softly',
-                    'Tightlined dark eyes with lush, dramatic mascara and soft feathered brows',
-                    'Ombré vampire lips: black lip liner fading into deep blood-red or crimson velvet lipstick'
-                ],
-                outfit: 'A steel-boned brocade underbust corset over a billowy poet shirt with bishop sleeves, floor-length velvet skirt, and a mourning cameo choker.'
-            },
-            {
-                id: 'strega-fashion',
-                name: 'Strega (Dark Forest Witch)',
-                category: 'witchy',
-                categoryLabel: 'Witchy & Ethereal',
-                icon: 'fa-crow',
-                era: '2010s – Present',
-                fabrics: ['Raw Linen', 'Distressed Knitwear', 'Faux Fur', 'Tattered Gauze', 'Leather'],
-                summary: 'Rooted in Italian folklore ("Strega" means witch), blending dark lagenlook layering, earthy decay, and pagan mysticism.',
-                accessories: [
-                    'Ethically sourced bone, antler, crow feather, and talon jewelry',
-                    'Hand-forged iron or blackened silver rings, talisman pouches, and rune pendants',
-                    'Draped asymmetrical cowls, hooded scarves, and wide-brimmed felt witch hats',
-                    'Worn leather wrap belts and rugged lace-up ankle boots'
-                ],
-                makeup: [
-                    'Natural, matte skin with earthy contour and organic freckles left untouched',
-                    'Smoky espresso, charcoal, and mossy olive eyeshadow smudged with fingertips',
-                    'Subtle inner-corner highlight using warm antique gold or bone shimmer',
-                    'Stained berry, dried fig, or deep terracotta-brown lip tints'
-                ],
-                outfit: 'Asymmetrical draped black linen tunics, distressed cobweb knit sweater, raw leather wrap belt, and crow-feather talismans.'
-            },
-            {
-                id: 'cyber-goth',
-                name: 'Cybergoth & Rivethead',
-                category: 'industrial',
-                categoryLabel: 'Cyber & Industrial',
-                icon: 'fa-biohazard',
-                era: 'Late 1990s – 2000s (Industrial & Rave Crossover)',
-                fabrics: ['PVC / Vinyl', 'Neoprene', 'Reflective Nylon', 'Ripstop', 'Mesh'],
-                summary: 'Dystopian sci-fi meets underground industrial dance floors, contrasting pitch-black tactical gear with radioactive neon accents.',
-                accessories: [
-                    'Tubular crinoline "cyberlox" hair falls braided with foam and wiring',
-                    'Welding goggles or tinted cybernetic visor glasses worn on the forehead',
-                    'Customized respirators/gas masks with biohazard symbols',
-                    'Massive knee-high platform boots (New Rocks or Demonias) with metal plates',
-                    'UV-reactive arm warmers and heavy industrial chain belts'
-                ],
-                makeup: [
-                    'Ultra-sharp graphic geometric eyeliner extending across the brow bone and cheeks',
-                    'UV-reactive neon violet, toxic green, or electric blue pigments paired with pitch black',
-                    'Metallic silver or holographic highlighter along the nose bridge and temples',
-                    'Pitch-black metallic or high-shine vinyl-finish lipstick'
-                ],
-                outfit: 'A high-neck PVC crop top, baggy multi-strap bondage parachute pants, neon purple cyberlox falls, and towering metal-plated platform boots.'
-            },
-            {
-                id: 'crust-punk',
-                name: 'Crust Punk & Gutter Grunge',
-                category: 'grunge',
-                categoryLabel: 'Grunge & Punk',
-                icon: 'fa-skull-crossbones',
-                era: 'Mid-1980s – Present',
-                fabrics: ['Waxed Canvas', 'Heavy Denim', 'Burlap', 'Scraps', 'Studded Leather'],
-                summary: 'Hardcore DIY anarcho-punk aesthetic built entirely from repurposed scraps, dental-floss stitching, and anti-capitalist patches.',
-                accessories: [
-                    'Bullet belts, pyramid-studded leather wristbands, and heavy padlocks worn as necklaces',
-                    'Hand-painted canvas "crust pants" covered in overlapping band patches sewn with dental floss',
-                    'Bottle-cap pins, safety-pin chains, and lighter-leash hardware',
-                    'Steel-toe combat boots laced with mismatched paracord'
-                ],
-                makeup: [
-                    'Raw, unapologetic smudged black greasepaint or kohl around the eyes',
-                    'Occasional DIY face tattoos, stitched-lip eyeliner art, or anarchy cheek stamps',
-                    'No foundation—weathered, authentic skin texture is part of the ethos',
-                    'Dark stained lips or bare chapped lips'
-                ],
-                outfit: 'A heavily studded and hand-painted denim vest ("battle jacket") over a tattered band tee, dental-floss patched crust pants, and a bullet belt.'
-            },
-            {
-                id: 'mall-goth',
-                name: '90s/2000s Mall Goth & Nu-Metal',
-                category: 'goth',
-                categoryLabel: 'Goth & Darkwave',
-                icon: 'fa-link',
-                era: 'Late 1990s – Mid 2000s',
-                fabrics: ['Heavy Cotton Twill', 'Pinstripe', 'Mesh', 'Faux Leather', 'Velour'],
-                summary: 'Nostalgic Y2K suburban rebellion characterized by baggy bondage trousers, spooky cartoon motifs, and heavy chrome hardware.',
-                accessories: [
-                    'Tripp NYC-style wide-leg bondage pants draped with removable D-ring chains and straps',
-                    'Spiked leather chokers, ball-chain necklaces, and rubber jelly bracelets',
-                    'Striped arm warmers, fingerless skeleton gloves, and studded pyramid belts',
-                    'Chunky platform sneakers or towering buckled Demonia boots'
-                ],
-                makeup: [
-                    'Heavy black pencil eyeliner smudged thickly on both upper and lower lids',
-                    'Frosty silver, icy lilac, or metallic grey shimmer eyeshadow across the lid',
-                    'Thin, sharply defined early-2000s arched eyebrows',
-                    'Dark plum-brown lip liner paired with frosty purple or pitch-black lipstick'
-                ],
-                outfit: 'A fitted band graphic tee over a black-and-purple striped long sleeve, chain-covered Tripp bondage pants, spiked collar, and chunky platforms.'
-            },
-            {
-                id: 'corporate-goth',
-                name: 'Corporate Goth (Corp Goth)',
-                category: 'goth',
-                categoryLabel: 'Goth & Darkwave',
-                icon: 'fa-briefcase',
-                era: '1990s – Present',
-                fabrics: ['Pinstripe Wool', 'Silk Chiffon', 'Velvet', 'Crisp Poplin', 'Leather'],
-                summary: 'Subversive elegance tailored for the daylight world—merging sharp Victorian-inspired tailoring with sleek professional silhouettes.',
-                accessories: [
-                    'Subtle sterling silver bat, coffin, or anatomical heart lapel pins and collar tips',
-                    'Structured black leather handbags with silver hardware or coffin-shaped clutches',
-                    'Pointed-toe leather Chelsea boots, monk-strap loafers, or sleek stiletto ankle boots',
-                    'Delicate silver rosary-style layered chains and dark garnet stud earrings'
-                ],
-                makeup: [
-                    'Flawless, long-wearing satin-matte skin with sculpted cheekbone contour',
-                    'Precision-winged black liquid eyeliner paired with taupe or matte plum crease shading',
-                    'Groomed, defined dark brows with a sharp tail',
-                    'Classic vampiric matte lipstick in deep oxblood, blackberry, or blackened wine'
-                ],
-                outfit: 'A tailored black pinstripe blazer over a high-neck sheer lace blouse, high-waisted cigarette trousers, silver collar tips, and pointed leather boots.'
-            },
-            {
-                id: 'visual-kei',
-                name: 'Visual Kei & Kuroi Niji',
-                category: 'jfashion',
-                categoryLabel: 'Dark J-Fashion & Kei',
-                icon: 'fa-masks-theater',
-                era: '1980s Japan – Present',
-                fabrics: ['Jacquard', 'Lace', 'PVC', 'Satin', 'Ruffled Organza'],
-                summary: 'Japanese theatrical rock fashion blending flamboyant androgyny, baroque aristocrat tailoring, and intense visual storytelling.',
-                accessories: [
-                    'Asymmetrical silver cross earrings, ear cuffs, and ornate chained finger-armor rings',
-                    'Layered crucifixes, pocket watches, and leather harness straps',
-                    'Intricately styled gravity-defying layered hair with colorful or silver streaks',
-                    'Platform buckled boots and lace-trimmed jabot neckties'
-                ],
-                makeup: [
-                    'Porcelain airbrushed skin with sharp nose-bridge contouring for an ethereal, doll-like structure',
-                    'Elongated "droopy" or sharply upturned gradient eyeshadow in crimson, violet, and charcoal',
-                    'Dramatic spiky lower eyelashes (drawn on or applied) and colored contact lenses',
-                    'Gradient "bitten" dark wine lips with a glossy center'
-                ],
-                outfit: 'An asymmetrical ruffled baroque tailcoat, faux-leather skinny trousers with dangling chains, finger-armor rings, and dramatic spiky layered hair.'
-            },
-            {
-                id: 'gothic-lolita',
-                name: 'Gothic Lolita (EGA / EGL)',
-                category: 'jfashion',
-                categoryLabel: 'Dark J-Fashion & Kei',
-                icon: 'fa-crown',
-                era: 'Late 1990s Harajuku – Present',
-                fabrics: ['Cotton Broadcloth', 'Guipure Lace', 'Velveteen', 'Chiffon', 'Tulle'],
-                summary: 'Modest, Rococo- and Victorian-doll-inspired Japanese street fashion defined by a bell-shaped cupcake silhouette and eerie elegance.',
-                accessories: [
-                    'Lace-trimmed rectangle headdresses, mini top hats, or giant velvet bows',
-                    'Bat-wing backpacks, coffin-shaped purses, and lace-trimmed parasols',
-                    'Over-the-knee socks with baroque cross prints and platform Mary Jane tea-party shoes',
-                    'Cameo chokers, porcelain doll-joint tights, and silver cross bracelets'
-                ],
-                makeup: [
-                    'Soft, doll-like luminous matte base with high-placed plum or dusty rose blush under the eyes',
-                    'Aegyo-sal (under-eye) shimmer paired with dark burgundy and charcoal outer-corner shading',
-                    'Full, fluttery doll lashes and delicate winged liner',
-                    'Rounded cupid’s-bow lips in deep rosewood, berry, or dark cherry tint'
-                ],
-                outfit: 'A bell-shaped black and deep purple jumper skirt (JSK) supported by a voluminous petticoat, high-neck lace blouse, rectangle headdress, and platform Mary Janes.'
-            },
-            {
-                id: 'deathrock',
-                name: 'Deathrock & Batcave Punk',
-                category: 'goth',
-                categoryLabel: 'Goth & Darkwave',
-                icon: 'fa-skull',
-                era: 'Early 1980s California',
-                fabrics: ['Shredded Fishnet', 'Distressed Leather', 'Spiderweb Lace', 'Bleached Denim'],
-                summary: 'The raw, horror-punk American cousin of UK Goth—faster, louder, and drenched in B-movie horror imagery and DIY destruction.',
-                accessories: [
-                    'Hand-painted leather jackets featuring horror icons, bats, and band logos',
-                    'Shredded fishnet stockings worn as torn tops and layered arm sleeves',
-                    'Bone jewelry, safety pins, studded belts, and heavy silver skull rings',
-                    'Scuffed pointed-toe boots or vintage creepers'
-                ],
-                makeup: [
-                    'Stark white or ghostly pale base with hollowed-out dark grey cheek and temple contouring',
-                    'Chaotic, jagged black eyeliner wings and spiderweb or stitched-mouth motifs',
-                    'Shaved or drawn-on theatrical eyebrows',
-                    'Black lipstick or smeared blood-red lip paint'
-                ],
-                outfit: 'A shredded fishnet top over a torn horror band tee, bleached and patched skinny jeans, safety-pin jewelry, and a towering teased deathhawk.'
-            },
-            {
-                id: 'dark-mori',
-                name: 'Dark Mori Kei (Forest Girl)',
-                category: 'witchy',
-                categoryLabel: 'Witchy & Ethereal',
-                icon: 'fa-leaf',
-                era: 'Late 2000s Japan – Present',
-                fabrics: ['Raw Cotton', 'Linen', 'Crochet Lace', 'Gauze', 'Tweed'],
-                summary: 'A shadowy twist on Japanese "Forest Girl" fashion—resembling a ghostly woodland spirit wandering through an enchanted midnight forest.',
-                accessories: [
-                    'Antique brass pocket watches, skeleton keys, and dried flower resin lockets',
-                    'Crocheted shawls, oversized knitted leg warmers, and lace-trimmed bonnets',
-                    'Worn vintage leather satchels and lace-up Victorian ankle boots',
-                    'Layered tarnished brass and oxidized silver woodland charm necklaces'
-                ],
-                makeup: [
-                    'Soft, dewy porcelain skin with rosy-berry blush swept across the cheeks and nose bridge',
-                    'Warm taupe, muted plum, and soft charcoal eyeshadow with zero harsh lines',
-                    'Soft brown mascara and natural, feathery brows',
-                    'Blurred, softly stained blackberry or dried-rose lip balm'
-                ],
-                outfit: 'Multiple flowing layers of charcoal and plum linen dresses, a tattered crochet cardigan, lace-trimmed petticoat peeking out, and skeleton key necklaces.'
-            },
-            {
-                id: 'fairy-grunge',
-                name: 'Fairy Grunge & Dark Coquette',
-                category: 'grunge',
-                categoryLabel: 'Grunge & Punk',
-                icon: 'fa-wand-magic-sparkles',
-                era: '2020s Internet Revival (90s Kinderwhore + Ethereal)',
-                fabrics: ['Sheer Mesh', 'Distressed Knit', 'Satin', 'Lace Trim', 'Velvet'],
-                summary: 'Delicate, ethereal woodland fairy aesthetics corrupted by 90s grunge grit, distressed textures, and melancholic decay.',
-                accessories: [
-                    'Distressed open-knit bolero shrugs, leg warmers, and frayed ribbon chokers',
-                    'Tarnished silver fairy-wing pendants, pearl-and-chain chokers, and butterfly hair clips',
-                    'Sheer over-the-knee socks paired with chunky buckled platforms or worn boots',
-                    'Thrifted crocheted crossbody bags'
-                ],
-                makeup: [
-                    'Glass-skin dewy base with iridescent violet or silvery-green inner-corner highlight',
-                    'Smudged charcoal pencil liner blended into soft smoky taupe shadow',
-                    'Spidery, clumped "doll" eyelashes and soft bleached or feathered brows',
-                    'Glossy bruised-berry or sheer black-cherry tinted lip oil'
-                ],
-                outfit: 'An asymmetrical lace-trim satin slip dress layered under a distressed dark plum open-knit sweater, frayed velvet ribbon choker, and leg warmers.'
-            },
-            {
-                id: 'dark-academia',
-                name: 'Dark Academia & Occult Scholar',
-                category: 'witchy',
-                categoryLabel: 'Witchy & Ethereal',
-                icon: 'fa-book-open',
-                era: '2010s – Present (Classic Gothic Literature)',
-                fabrics: ['Tweed', 'Corduroy', 'Cashmere', 'Oxford Cotton', 'Wool'],
-                summary: 'Romanticizing classic literature, gothic architecture, secret societies, and candlelit midnight study sessions.',
-                accessories: [
-                    'Vintage gold or tarnished brass signet rings, antique pocket watches, and fountain pens',
-                    'Wire-rimmed round spectacles and silk neck scarves',
-                    'Structured leather satchels filled with annotated poetry books',
-                    'Brogue oxfords or polished leather Chelsea boots'
-                ],
-                makeup: [
-                    'Velvety natural skin with soft sculpted cheekbones',
-                    'Warm espresso, muted burgundy, and antique bronze matte eyeshadow',
-                    'Subtle tightlined dark brown eyeliner and brushed-up natural brows',
-                    'Blotted oxblood, deep terracotta, or merlot wine lipstick'
-                ],
-                outfit: 'A dark charcoal tweed blazer over a black turtleneck, pleated wool trousers, antique signet rings, and polished leather brogues.'
-            },
-            {
-                id: 'techwear-dark',
-                name: 'Dark Techwear & Shadow Ninja',
-                category: 'industrial',
-                categoryLabel: 'Cyber & Industrial',
-                icon: 'fa-shield-halved',
-                era: '2010s – Present',
-                fabrics: ['Gore-Tex', 'Ripstop Nylon', 'Ballistic Cordura', 'Neoprene'],
-                summary: 'Utilitarian cyberpunk streetwear engineered for urban stealth, harsh weather resistance, and futuristic tactical silhouettes.',
-                accessories: [
-                    'Fidlock magnetic buckle belts, chest rigs, and modular MOLLE sling bags',
-                    'Technical gaiter face masks and weather-sealed hooded shells',
-                    'Matte-black carabiner hardware and sleek tactical watches',
-                    'Futuristic matte-black trail sneakers or waterproof combat boots'
-                ],
-                makeup: [
-                    'Clean, matte skin with razor-sharp graphic black eyeliner accents',
-                    'Monochromatic grey and pitch-black smoky shading',
-                    'Sleek, sharp brows and bare or matte-black tinted lips'
-                ],
-                outfit: 'A matte-black waterproof shell jacket with articulated sleeves, tapered cargo joggers with hanging nylon straps, modular chest rig, and tactical boots.'
-            },
-            {
-                id: 'emo',
-                name: '2000s Emo & Mall Screamo',
-                category: 'emo-y2k',
-                categoryLabel: 'Emo, Scene & Y2K',
-                icon: 'fa-heart-crack',
-                era: 'Early-to-Late 2000s (MySpace & Warped Tour Era)',
-                fabrics: ['Stretch Denim', 'Cotton Jersey', 'Striped Knit', 'Canvas', 'Leather'],
-                summary: 'Melancholic, poetic, and angst-fueled—defined by swooping side-parted bangs, tight band tees, and thick black eyeliner.',
-                accessories: [
-                    'Pyramid-studded leather belts worn slanted over the hips',
-                    'Stacks of rubber band bracelets, safety-pin jewelry, and checkered wristbands',
-                    'Canvas messenger bags covered in safety pins, band buttons, and sharpie lyrics',
-                    'Scuffed high-top Converse, slip-on checkered Vans, or Osiris skate shoes'
-                ],
-                makeup: [
-                    'Thick, heavily smudged black kohl eyeliner ringing the entire upper and lower lash line ("raccoon eyes")',
-                    'Matte, pale skin with minimal blush and concealed lips ("concealer lips" or bare)',
-                    'Deep plum, dark crimson, or smudged charcoal eyeshadow smoked out around the socket',
-                    'Razor-cut, flat-ironed side-swept bangs covering one eye'
-                ],
-                outfit: 'A tight vintage band tee layered over a black-and-purple striped long sleeve, ultra-skinny black jeans, a slanted studded belt, and beat-up Converse.'
-            },
-            {
-                id: 'scene',
-                name: 'Scene Queen / King (MySpace Trash)',
-                category: 'emo-y2k',
-                categoryLabel: 'Emo, Scene & Y2K',
-                icon: 'fa-bolt',
-                era: 'Mid-to-Late 2000s',
-                fabrics: ['Neon Mesh', 'Leopard Print', 'Tulle Tutu', 'Spandex', 'Faux Fur'],
-                summary: 'Hyper-maximalist, loud, and rebellious—fusing teased razor-cut hair, raccoon-tail hair extensions, and chaotic cartoon-goth motifs.',
-                accessories: [
-                    'Oversized hair bows, plastic crowns/tiaras, and striped raccoon-tail clip-in extensions',
-                    'Layered plastic beaded kandi bracelets, brass-knuckle necklaces, and diamond-shaped pendants',
-                    'Shutter shades, studded belts layered in twos or threes, and fingerless skeleton gloves',
-                    'Knee-high striped socks paired with skate shoes or slouchy boots'
-                ],
-                makeup: [
-                    'Dramatic, winged black liquid eyeliner paired with vibrant neon violet, electric blue, or hot pink eyeshadow',
-                    'Dramatic false eyelashes (both top and bottom) and sharp drawn-on beauty marks or stars',
-                    'Pale matte foundation with bright bubblegum or frosty lilac blush',
-                    'Iconic pale "concealer lips" topped with ultra-glossy clear or sparkly lip gloss'
-                ],
-                outfit: 'A heavily teased mullet-style hairdo with purple raccoon stripes, a graphic monster-print hoodie, layered tulle tutu over leopard-print skinny jeans, and armfuls of kandi.'
-            },
-            {
-                id: 'mcbling',
-                name: 'McBling & Dark Y2K Trash Glam',
-                category: 'emo-y2k',
-                categoryLabel: 'Emo, Scene & Y2K',
-                icon: 'fa-gem',
-                era: '2003 – 2008 (Mid-2000s Pop-Punk & Reality TV Glam)',
-                fabrics: ['Crushed Velour', 'Rhinestone Mesh', 'Low-Rise Denim', 'Faux Fur', 'Metallic Leather'],
-                summary: 'Unapologetic mid-2000s trash-glam maximalism—blending gothic crosses, Ed Hardy tattoo art, rhinestone skulls, and velour luxury.',
-                accessories: [
-                    'Chunky rhinestone cross necklaces, oversized hoop earrings, and metallic chain belts',
-                    'Ed Hardy / Von Dutch style trucker hats, tinted rimless shield sunglasses, and charm bracelets',
-                    'Slouchy studded leather hobo bags or miniature monogrammed shoulder purses',
-                    'Pointed-toe stiletto boots, fur-trimmed boots, or platform flip-flops'
-                ],
-                makeup: [
-                    'Bronzed, airbrushed skin with blinding silver or icy violet shimmer highlighter',
-                    'Frosty lilac, metallic silver, or smoky plum eyeshadow blended up to the brow bone',
-                    'Thin, sharply arched 2000s brows and wispy, glamorous false lashes',
-                    'Dark plum or brown lip liner paired with ultra-shiny, glittery berry or frosted pink lip gloss'
-                ],
-                outfit: 'A deep plum velour zip-up tracksuit encrusted with rhinestone gothic crosses, low-rise flared jeans, oversized shield sunglasses, and chunky silver jewelry.'
-            },
-            {
-                id: 'ganguro',
-                name: 'Ganguro Gyaru',
-                category: 'gyaru',
-                categoryLabel: 'Gyaru Realms',
-                icon: 'fa-sun',
-                era: 'Late 1990s – Early 2000s Shibuya',
-                fabrics: ['Hibiscus Print', 'Terry Cloth', 'Denim', 'Faux Fur', 'Neon Spandex'],
-                summary: 'Iconic Shibuya street rebellion rejecting traditional Japanese beauty standards through deep artificial tans, bleached hair, and high-contrast white makeup.',
-                accessories: [
-                    'Hibiscus flower hair clips, oversized white-rimmed sunglasses, and lei garlands',
-                    'Towering platform sandals, chunky cork wedges, and loose slouch socks',
-                    'Decoden rhinestone-encrusted flip phones with long dangling plush charms',
-                    'Chunky plastic bangles, shell necklaces, and mini terry-cloth tote bags'
-                ],
-                makeup: [
-                    'Deep tanned complexion contrasted with stark white concealer/eyeshadow around the eyes and down the nose bridge',
-                    'Thick black liquid eyeliner forming a dramatic "droopy" puppy-eye wing',
-                    'Stacked, ultra-dense false eyelashes (top and bottom) and bleached thin eyebrows',
-                    'Matte white, frosty silver, or pale pastel pink lipstick'
-                ],
-                outfit: 'Bleached blonde teased hair with hibiscus clips, a halter-neck tropical print mini dress, tan skin with stark white eye makeup, and 6-inch platform sandals.'
-            },
-            {
-                id: 'yamanba',
-                name: 'Yamanba & Manba Gyaru',
-                category: 'gyaru',
-                categoryLabel: 'Gyaru Realms',
-                icon: 'fa-bolt-lightning',
-                era: 'Early-to-Mid 2000s (Extreme Ganguro Evolution)',
-                fabrics: ['Faux Fur', 'Neon Mesh', 'Metallic Vinyl', 'Tie-Dye', 'Distressed Denim'],
-                summary: 'Named after a mountain witch in Japanese folklore, Yamanba pushes Gyaru to hyper-maximalist extremes with neon hair, extreme tans, and face stickers.',
-                accessories: [
-                    'Metallic star, heart, and teardrop face stickers placed beneath the eyes',
-                    'Massive neon-dyed or platinum teased hair mixed with synthetic extensions and furry leg warmers',
-                    'Alba Rosa hibiscus coats, rave kandi bracelets, and glowing neon accessories',
-                    'Sky-high platform boots or furry snow boots worn with micro-minis'
-                ],
-                makeup: [
-                    'Ultra-dark tan base paired with bold white panda-eye makeup extending to the temples and a thick white stripe down the nose',
-                    'Heavy black kohl and liquid liner creating exaggerated, cartoonishly large eye shapes',
-                    'Double- or triple-stacked spiky false eyelashes and circle lenses',
-                    'Stark matte white or frosty silver lipstick'
-                ],
-                outfit: 'Neon violet and platinum teased hair, face stickers under stark white panda-eye makeup, a furry halter top, denim micro-skirt, and fluffy platform leg warmers.'
-            },
-            {
-                id: 'hime-gyaru',
-                name: 'Hime Gyaru (Princess Gyaru)',
-                category: 'gyaru',
-                categoryLabel: 'Gyaru Realms',
-                icon: 'fa-crown',
-                era: 'Mid-2000s (Jesus Diamante & Ageha Era)',
-                fabrics: ['Rose-Print Chiffon', 'Satin', 'Ruffled Lace', 'Tulle', 'Velvet'],
-                summary: 'Rococo princess luxury meets Shibuya glam—characterized by towering Bouffant curls, Marie Antoinette silhouettes, and opulent crystal jewelry.',
-                accessories: [
-                    'Sparkling rhinestone tiaras, oversized satin ribbon bows, and silk rose corsages',
-                    'Quilted pearl-chain handbags, lace-trimmed parasols, and jewel-encrusted mirrors',
-                    'Crystal chandelier earrings, pearl chokers, and ornate cameo rings',
-                    'High-heeled ribbon-laced pumps and ruffled lace ankle socks'
-                ],
-                makeup: [
-                    'Airbrushed porcelain-to-warm-ivory skin with bright doll-like pink or plum blush high on the cheekbones',
-                    'Shimmering champagne, rose, and dark brown gradient eyeshadow with a pronounced puffy under-eye (aegyo-sal)',
-                    'Dramatic, feathery outer-corner false eyelashes and crisp dark brown eyeliner',
-                    'Ultra-glossy, plumped rose-pink or berry lips lined cleanly'
-                ],
-                outfit: 'Towering curly "sujimori" beehive hair topped with a crystal tiara, a ruffled corset-laced rose chiffon dress, pearl chokers, and satin bow heels.'
-            },
-            {
-                id: 'rokku-gyaru',
-                name: 'Rokku Gyaru (Rock Gyaru)',
-                category: 'gyaru',
-                categoryLabel: 'Gyaru Realms',
-                icon: 'fa-guitar',
-                era: 'Mid-to-Late 2000s (Ghost of Harlem & GLAD NEWS)',
-                fabrics: ['Distressed Denim', 'Faux Leather', 'Skull-Print Jersey', 'Tartan Plaid', 'Mesh'],
-                summary: 'Where Shibuya Gyaru collides with punk rock and grunge—trading pastel glamour for shredded denim, skull motifs, heavy silver hardware, and smoky eyes.',
-                accessories: [
-                    'Studded leather belts, skull-and-crossbones necklaces, and layered silver wallet chains',
-                    'Shredded fishnet tights, fingerless leather gloves, and spiked cuff bracelets',
-                    'Oversized distressed leather biker jackets and tartan plaid waist-tied shirts',
-                    'Heavy buckled engineer boots or studded platform ankle boots'
-                ],
-                makeup: [
-                    'Heavy, smudged charcoal and pitch-black smoky eyeshadow blended sharply outward',
-                    'Thick black liquid eyeliner extending into dramatic lower-lash "droop" wings',
-                    'Dense, spiky false lashes and pale, sculpted matte skin with sharp nose contour',
-                    'Pale nude-beige "concealer lips" or dark vampy berry gloss'
-                ],
-                outfit: 'Teased blonde-and-black hair, smudged raccoon-smoky gyaru eye makeup, a skull-print off-shoulder tee, shredded denim shorts over ripped fishnets, and studded boots.'
-            },
-            {
-                id: 'goshikku-gyaru',
-                name: 'Goshikku Gyaru (Gothic Gyaru)',
-                category: 'gyaru',
-                categoryLabel: 'Gyaru Realms',
-                icon: 'fa-cross',
-                era: 'Late 2000s – 2010s',
-                fabrics: ['Black Lace', 'Crushed Velvet', 'Chiffon', 'Faux Leather', 'Brocade'],
-                summary: 'A dark, nocturnal fusion of Gothic romance and Gyaru eye-enlarging makeup—combining crucifixes, black roses, and teased volume.',
-                accessories: [
-                    'Ornate silver crucifixes, rosary necklaces, and black rose hair clips',
-                    'Lace chokers, velvet ribbon bows, and gothic bat or spiderweb rings',
-                    'Sheer lace-trimmed cardigans, corset belts, and ruffled black parasols',
-                    'Towering lace-up platform boots or gothic Mary Janes'
-                ],
-                makeup: [
-                    'Porcelain or lightly tanned matte base with dramatic nose-bridge and cheekbone contouring',
-                    'Deep plum, burgundy, and pitch-black eyeshadow with heavy lower-lash eyeliner droop',
-                    'Spiky, separated "doll" false eyelashes on both top and bottom lids with dark circle lenses',
-                    'Gradient dark wine, oxblood, or glossy black-cherry lips'
-                ],
-                outfit: 'Voluminous teased dark curls with a black lace bow, dramatic droopy-eye plum & black gyaru makeup, a velvet corset top, tiered lace skirt, and silver rosaries.'
-            },
-            {
-                id: 'tsuyome-gyaru',
-                name: 'Tsuyome & Ora-Ora Gyaru',
-                category: 'gyaru',
-                categoryLabel: 'Gyaru Realms',
-                icon: 'fa-fire',
-                era: 'Late 2000s – Early 2010s (d.i.a. & Ma*rs Era)',
-                fabrics: ['Leopard Print', 'Distressed Denim', 'Metallic Lame', 'Faux Fur', 'Leather'],
-                summary: '"Tsuyome" means "strong"—an unapologetic, fierce, tanned powerhouse aesthetic famous for gold chains, leopard print, and razor-sharp contour.',
-                accessories: [
-                    'Massive gold-plated chain belts, dangling feather earrings, and oversized hoop earrings',
-                    'Faux-fur tail keychains clipped to belt loops and distressed leather cross-strap tops',
-                    'Ripped low-rise denim micro-shorts and bold leopard-print accents',
-                    'Sky-high metallic or leopard-print stiletto platform boots'
-                ],
-                makeup: [
-                    'Warm bronzed skin with intense, razor-sharp nose-bridge and cheekbone highlight and contour',
-                    'Sharp, elongated cat-eye liquid liner paired with bronzed gold, charcoal, and black smoky lids',
-                    'Ultra-thick, winged-out false eyelashes and sharply arched, light-brown/blonde brows',
-                    'Pale nude-beige matte lips topped with clear high-shine gloss'
-                ],
-                outfit: 'Voluminous bronzed curls, razor-sharp contoured makeup, a black-and-gold d.i.a. cross-strap halter top, distressed denim micro-shorts with a heavy gold chain belt, and fur tail charm.'
-            },
-            {
-                id: 'agejo-gyaru',
-                name: 'Agejo Gyaru (Koakuma Ageha)',
-                category: 'gyaru',
-                categoryLabel: 'Gyaru Realms',
-                icon: 'fa-martini-glass-citrus',
-                era: 'Mid-to-Late 2000s (Koakuma Ageha Magazine)',
-                fabrics: ['Satin', 'Chiffon', 'Leopard Print', 'Lace', 'Sequins'],
-                summary: 'Inspired by glamorous Tokyo hostess nightlife ("Little Devil Butterfly"), blending seductive satin-and-lace dresses with towering hair.',
-                accessories: [
-                    'Crystal butterfly hairpins, oversized satin bows, and sparkling rhinestone chokers',
-                    'Quilted designer-inspired chain bags and long, intricately decorated 3D acrylic nails',
-                    'Dangling crystal chandelier earrings and delicate ankle bracelets',
-                    'Glittery platform stiletto heels'
-                ],
-                makeup: [
-                    'Luminous, airbrushed skin with soft rosy-plum blush blended toward the temples',
-                    'Shimmery mauve, deep plum, and espresso eyeshadow with heavy lower-lash droop eyeliner',
-                    'Full, fluttery outer-heavy false lashes and enlarged dark circle lenses',
-                    'Glossy berry-pink or plum-tinted "jelly" lips'
-                ],
-                outfit: 'Towering curled "sujimori" updo with butterfly pins, a lace-trimmed purple and black leopard satin mini dress, 3D rhinestone nails, and platform stilettos.'
-            },
-            {
-                id: 'kogal-gyaru',
-                name: 'Kogal (Kogyaru)',
-                category: 'gyaru',
-                categoryLabel: 'Gyaru Realms',
-                icon: 'fa-school',
-                era: '1990s – Early 2000s',
-                fabrics: ['Tartan Wool', 'Chunky Knit', 'Cotton Poplin', 'Fleece', 'Denim'],
-                summary: 'The rebellious schoolgirl pioneers of Gyaru—subverting strict Japanese school uniforms with shortened plaid skirts, loose socks, and bleached hair.',
-                accessories: [
-                    'Iconic baggy white "loose socks" (ruuzu sokkusu) bunched around the ankles with sock glue',
-                    'Oversized slouchy knit cardigans tied around the waist and customized school tote bags covered in plush keychains',
-                    'Instant Polaroid cameras, colorful hair clips, and pastel scrunchies',
-                    'Chunky brown or black leather platform loafers'
-                ],
-                makeup: [
-                    'Warm sun-kissed or lightly tanned base with bright coral or rosy cheek tint',
-                    'White pearlescent eyeshadow on the brow bone and inner corners with clean black eyeliner',
-                    'Curled, mascara-coated lashes and thin, high-arched brown brows',
-                    'Frosted pink or glossy berry-tinted lips'
-                ],
-                outfit: 'Dyed light-brown layered hair, an oversized dark cardigan over a crisp button-up and ribbon tie, shortened plaid pleated skirt, bunched loose socks, and leather loafers.'
-            }
-        ];
+  </main>
 
-        // State Management
-        let currentFilter = 'all';
-        let searchQuery = '';
-        let savedIds = JSON.parse(localStorage.getItem('nocturnalGrimoire')) || [];
-        let activeModalId = null;
+  <script>
+    /* ==========================================
+       PROJECT DATA (THE GRIMOIRE)
+       ========================================== */
+    const projects = [
+      {
+        title: "Sim 1",
+        category: "Sims",
+        url: "root-sim1.html",
+        desc: "My first simulation. A particle system mimicking the chaotic behavior of dark energy.",
+        date: "Summoned: 2024"
+      },
+      {
+        title: "Coven Forum",
+        category: "Sites",
+        url: "#",
+        desc: "A brutalist web interface designed for anonymous digital covens to share scripts.",
+        date: "Summoned: 2023"
+      },
+      {
+        title: "Abyssal Crawler",
+        category: "Games",
+        url: "#",
+        desc: "A text-based dungeon crawler where the darkness consumes your light source over time.",
+        date: "Summoned: 2024"
+      },
+      {
+        title: "Tarot Logic Solver",
+        category: "Other",
+        url: "#",
+        desc: "An algorithmic script that uses Tarot constraints to solve complex logical puzzles.",
+        date: "Summoned: 2023"
+      }
+    ];
 
-        // DOM Elements
-        const grid = document.getElementById('subcultureGrid');
-        const searchInput = document.getElementById('searchInput');
-        const filterBtns = document.querySelectorAll('.filter-btn');
-        const resultsLabel = document.getElementById('resultsLabel');
-        const emptyState = document.getElementById('emptyState');
-        const resetSearchBtn = document.getElementById('resetSearchBtn');
+    /* ==========================================
+       GALLERY RENDERING & FILTERING
+       ========================================== */
+    const gallery = document.getElementById('gallery');
+    const filterBtns = document.querySelectorAll('.filter-btn');
 
-        // Detail Modal Elements
-        const detailModal = document.getElementById('detailModal');
-        const closeModalBtn = document.getElementById('closeModalBtn');
-        const modalSaveBtn = document.getElementById('modalSaveBtn');
+    function renderGallery(filterCategory) {
+      gallery.innerHTML = '';
+      
+      const filtered = filterCategory === 'All' 
+        ? projects 
+        : projects.filter(p => p.category === filterCategory);
 
-        // Grimoire Drawer Elements
-        const grimoireModal = document.getElementById('grimoireModal');
-        const openGrimoireBtn = document.getElementById('openGrimoireBtn');
-        const closeGrimoireBtn = document.getElementById('closeGrimoireBtn');
-        const clearGrimoireBtn = document.getElementById('clearGrimoireBtn');
-        const savedCount = document.getElementById('savedCount');
-        const savedList = document.getElementById('savedList');
+      if (filtered.length === 0) {
+        gallery.innerHTML = '<p class="col-span-full text-center text-[#8b79a5] italic py-10">No artifacts found in this category.</p>';
+        return;
+      }
 
-        // Toast
-        const toast = document.getElementById('toast');
-        const toastMsg = document.getElementById('toastMsg');
+      filtered.forEach(proj => {
+        const card = document.createElement('a');
+        card.href = proj.url;
+        card.target = "_blank"; // Opens in new tab
+        card.className = "spell-card block p-6 rounded-sm group cursor-pointer decoration-none";
+        
+        card.innerHTML = `
+          <div class="text-[#5f02d1] text-[10px] font-bold uppercase tracking-widest mb-3 border-b border-[#2f1745] pb-2 inline-block">
+            [ ${proj.category} ]
+          </div>
+          <h3 class="text-2xl font-bold mb-2 text-white group-hover:text-[#5f02d1] transition-colors gothic-text">
+            ${proj.title}
+          </h3>
+          <p class="text-[#8b79a5] text-sm mb-6 h-16 overflow-hidden">
+            ${proj.desc}
+          </p>
+          <div class="flex justify-between items-end">
+            <span class="text-[10px] text-[#4a1e1c] font-bold uppercase tracking-wider">${proj.date}</span>
+            <span class="text-[#5f02d1] text-lg font-bold group-hover:translate-x-2 transition-transform">→</span>
+          </div>
+        `;
+        gallery.appendChild(card);
+      });
+    }
 
-        function showToast(message) {
-            toastMsg.textContent = message;
-            toast.classList.remove('translate-y-24', 'opacity-0');
-            setTimeout(() => {
-                toast.classList.add('translate-y-24', 'opacity-0');
-            }, 2600);
-        }
+    // Filter Logic
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        // Reset active state
+        filterBtns.forEach(b => b.classList.remove('active'));
+        // Set new active state
+        btn.classList.add('active');
+        // Re-render
+        renderGallery(btn.getAttribute('data-filter'));
+      });
+    });
 
-        function updateSavedCount() {
-            savedCount.textContent = savedIds.length;
-            localStorage.setItem('nocturnalGrimoire', JSON.stringify(savedIds));
-        }
+    // Initial render
+    renderGallery('All');
 
-        function toggleSaveSubculture(id, event) {
-            if (event) event.stopPropagation();
-            const sub = subcultures.find(s => s.id === id);
-            if (!sub) return;
+    /* ==========================================
+       FLOATING EMBERS ANIMATION EFFECT
+       ========================================== */
+    function createEmber() {
+      const container = document.getElementById('ember-container');
+      const ember = document.createElement('div');
+      
+      // Randomize ember properties
+      const isBlood = Math.random() > 0.5;
+      ember.classList.add('ember');
+      if (isBlood) ember.classList.add('blood');
 
-            if (savedIds.includes(id)) {
-                savedIds = savedIds.filter(item => item !== id);
-                showToast(`Removed "${sub.name}" from Grimoire`);
-            } else {
-                savedIds.push(id);
-                showToast(`Bound "${sub.name}" to your Grimoire`);
-            }
-            updateSavedCount();
-            renderGrid();
-            renderGrimoireDrawer();
-            if (activeModalId === id) {
-                updateModalSaveButton(id);
-            }
-        }
+      // Random left position (0 to 100vw)
+      ember.style.left = Math.random() * 100 + 'vw';
+      
+      // Random animation duration (5s to 15s)
+      const duration = Math.random() * 10 + 5;
+      ember.style.animationDuration = duration + 's';
+      
+      // Random delay
+      ember.style.animationDelay = Math.random() * 5 + 's';
+      
+      // Random size (2px to 6px)
+      const size = Math.random() * 4 + 2;
+      ember.style.width = size + 'px';
+      ember.style.height = size + 'px';
 
-        function updateModalSaveButton(id) {
-            const isSaved = savedIds.includes(id);
-            if (isSaved) {
-                modalSaveBtn.innerHTML = `<i class="fa-solid fa-bookmark text-purple-200"></i> <span>Saved in Grimoire</span>`;
-                modalSaveBtn.classList.add('bg-arcaneViolet');
-            } else {
-                modalSaveBtn.innerHTML = `<i class="fa-regular fa-bookmark"></i> <span>Save to Grimoire</span>`;
-                modalSaveBtn.classList.remove('bg-arcaneViolet');
-            }
-        }
+      container.appendChild(ember);
 
-        // Render Cards
-        function renderGrid() {
-            const filtered = subcultures.filter(sub => {
-                const matchesCategory = currentFilter === 'all' || sub.category === currentFilter;
-                const q = searchQuery.toLowerCase().trim();
-                const matchesSearch = !q || 
-                    sub.name.toLowerCase().includes(q) ||
-                    sub.summary.toLowerCase().includes(q) ||
-                    sub.categoryLabel.toLowerCase().includes(q) ||
-                    sub.accessories.some(a => a.toLowerCase().includes(q)) ||
-                    sub.makeup.some(m => m.toLowerCase().includes(q)) ||
-                    sub.fabrics.some(f => f.toLowerCase().includes(q));
-                return matchesCategory && matchesSearch;
-            });
+      // Remove element after animation completes to keep DOM clean
+      setTimeout(() => {
+        ember.remove();
+      }, (duration + 5) * 1000);
+    }
 
-            resultsLabel.textContent = `Displaying ${filtered.length} of ${subcultures.length} Subcultures`;
-
-            if (filtered.length === 0) {
-                grid.innerHTML = '';
-                emptyState.classList.remove('hidden');
-                return;
-            }
-
-            emptyState.classList.add('hidden');
-            grid.innerHTML = filtered.map(sub => {
-                const isSaved = savedIds.includes(sub.id);
-                return `
-                    <article onclick="openDetailModal('${sub.id}')" class="group relative overflow-hidden bg-gradient-to-b from-abyssalPurple/95 to-voidBlack border border-witchPlum hover:border-arcaneViolet rounded-3xl p-6 transition-all duration-300 cursor-pointer card-border flex flex-col justify-between">
-                        <!-- Subtle Leopard Spot Watermark in Card Corner -->
-                        <div class="absolute inset-0 bg-dark-leopard opacity-15 group-hover:opacity-30 transition-opacity duration-300 pointer-events-none"></div>
-                        <div class="relative z-10">
-                            <!-- Top Row: Category & Bookmark -->
-                            <div class="flex items-center justify-between gap-2 mb-4">
-                                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-witchPlum/50 border border-witchPlum text-[11px] uppercase tracking-wider text-purple-200">
-                                    <i class="fa-solid ${sub.icon} text-arcaneViolet"></i>
-                                    ${sub.categoryLabel}
-                                </span>
-                                <button onclick="toggleSaveSubculture('${sub.id}', event)" title="Save to Grimoire" class="w-9 h-9 rounded-full bg-voidBlack/80 hover:bg-witchPlum border border-witchPlum flex items-center justify-center text-sm transition-all cursor-pointer ${isSaved ? 'text-arcaneViolet border-arcaneViolet' : 'text-gray-400 hover:text-white'}">
-                                    <i class="${isSaved ? 'fa-solid' : 'fa-regular'} fa-bookmark"></i>
-                                </button>
-                            </div>
-
-                            <!-- Title & Summary -->
-                            <h2 class="font-cinzel text-xl font-bold text-white group-hover:text-purple-300 transition-colors mb-2">
-                                ${sub.name}
-                            </h2>
-                            <p class="text-xs text-gray-400 leading-relaxed mb-5">
-                                ${sub.summary}
-                            </p>
-
-                            <!-- Quick Preview Pills: Accessories & Makeup -->
-                            <div class="space-y-3 pt-4 border-t border-witchPlum/40">
-                                <div>
-                                    <span class="text-[10px] uppercase tracking-widest text-purple-400 font-bold block mb-1">
-                                        <i class="fa-solid fa-ring mr-1"></i> Key Relics &amp; Accessories
-                                    </span>
-                                    <p class="text-xs text-gray-300 line-clamp-2">${sub.accessories[0]} • ${sub.accessories[1]}</p>
-                                </div>
-                                <div>
-                                    <span class="text-[10px] uppercase tracking-widest text-red-400 font-bold block mb-1">
-                                        <i class="fa-solid fa-eye mr-1"></i> Signature Makeup
-                                    </span>
-                                    <p class="text-xs text-gray-300 line-clamp-2">${sub.makeup[0]}</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Bottom CTA -->
-                        <div class="relative z-10 mt-6 pt-3 border-t border-witchPlum/30 flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-purple-300 group-hover:text-white">
-                            <span>Inspect Full Ritual</span>
-                            <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform text-arcaneViolet"></i>
-                        </div>
-                    </article>
-                `;
-            }).join('');
-        }
-
-        // Open Detail Modal
-        function openDetailModal(id) {
-            const sub = subcultures.find(s => s.id === id);
-            if (!sub) return;
-            activeModalId = id;
-
-            document.getElementById('modalIcon').innerHTML = `<i class="fa-solid ${sub.icon}"></i>`;
-            document.getElementById('modalCategory').textContent = sub.categoryLabel;
-            document.getElementById('modalTitle').textContent = sub.name;
-            document.getElementById('modalDescription').textContent = sub.summary;
-            document.getElementById('modalEra').textContent = sub.era;
-            document.getElementById('modalOutfit').textContent = `"${sub.outfit}"`;
-
-            document.getElementById('modalFabrics').innerHTML = sub.fabrics.map(f => 
-                `<span class="px-2.5 py-1 rounded-lg bg-voidBlack/80 border border-rustVelvet text-[11px] text-red-200">${f}</span>`
-            ).join('');
-
-            document.getElementById('modalAccessories').innerHTML = sub.accessories.map(item => 
-                `<li class="flex items-start gap-2.5">
-                    <i class="fa-solid fa-diamond text-[9px] text-arcaneViolet mt-1.5 shrink-0"></i>
-                    <span>${item}</span>
-                </li>`
-            ).join('');
-
-            document.getElementById('modalMakeup').innerHTML = sub.makeup.map(item => 
-                `<li class="flex items-start gap-2.5">
-                    <i class="fa-solid fa-sparkles text-[10px] text-red-400 mt-1.5 shrink-0"></i>
-                    <span>${item}</span>
-                </li>`
-            ).join('');
-
-            updateModalSaveButton(id);
-            modalSaveBtn.onclick = () => toggleSaveSubculture(id);
-
-            detailModal.classList.remove('hidden');
-            detailModal.classList.add('flex');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeDetailModal() {
-            detailModal.classList.add('hidden');
-            detailModal.classList.remove('flex');
-            document.body.style.overflow = '';
-            activeModalId = null;
-        }
-
-        // Grimoire Drawer Logic
-        function renderGrimoireDrawer() {
-            if (savedIds.length === 0) {
-                savedList.innerHTML = `
-                    <div class="text-center py-12 px-4 rounded-2xl bg-voidBlack/50 border border-witchPlum/40">
-                        <i class="fa-solid fa-moon text-3xl text-witchPlum mb-3"></i>
-                        <p class="text-sm text-gray-300 font-semibold mb-1">Your Grimoire is Empty</p>
-                        <p class="text-xs text-gray-500">Bookmark any subculture card to collect your favorite makeup and accessory rituals here.</p>
-                    </div>
-                `;
-                return;
-            }
-
-            savedList.innerHTML = savedIds.map(id => {
-                const sub = subcultures.find(s => s.id === id);
-                if (!sub) return '';
-                return `
-                    <div class="p-4 rounded-2xl bg-voidBlack/80 border border-witchPlum hover:border-arcaneViolet transition-all flex items-center justify-between gap-3">
-                        <div onclick="closeGrimoire(); openDetailModal('${sub.id}')" class="cursor-pointer flex-1">
-                            <span class="text-[10px] uppercase tracking-widest text-purple-400 block">${sub.categoryLabel}</span>
-                            <h4 class="font-cinzel text-sm font-bold text-white hover:text-purple-300">${sub.name}</h4>
-                        </div>
-                        <button onclick="toggleSaveSubculture('${sub.id}')" title="Remove" class="w-8 h-8 rounded-lg bg-bloodWine/40 hover:bg-bloodWine text-red-300 flex items-center justify-center transition-all cursor-pointer">
-                            <i class="fa-solid fa-trash-can text-xs"></i>
-                        </button>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        function openGrimoire() {
-            renderGrimoireDrawer();
-            grimoireModal.classList.remove('hidden');
-            grimoireModal.classList.add('flex');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeGrimoire() {
-            grimoireModal.classList.add('hidden');
-            grimoireModal.classList.remove('flex');
-            document.body.style.overflow = '';
-        }
-
-        // Event Listeners
-        searchInput.addEventListener('input', (e) => {
-            searchQuery = e.target.value;
-            renderGrid();
-        });
-
-        filterBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                filterBtns.forEach(b => {
-                    b.classList.remove('bg-arcaneViolet', 'text-white', 'border-arcaneViolet');
-                    b.classList.add('bg-voidBlack/60', 'text-gray-300', 'border-witchPlum');
-                });
-                btn.classList.remove('bg-voidBlack/60', 'text-gray-300', 'border-witchPlum');
-                btn.classList.add('bg-arcaneViolet', 'text-white', 'border-arcaneViolet');
-
-                currentFilter = btn.dataset.filter;
-                renderGrid();
-            });
-        });
-
-        resetSearchBtn.addEventListener('click', () => {
-            searchQuery = '';
-            searchInput.value = '';
-            currentFilter = 'all';
-            filterBtns[0].click();
-        });
-
-        closeModalBtn.addEventListener('click', closeDetailModal);
-        detailModal.addEventListener('click', (e) => {
-            if (e.target === detailModal) closeDetailModal();
-        });
-
-        openGrimoireBtn.addEventListener('click', openGrimoire);
-        closeGrimoireBtn.addEventListener('click', closeGrimoire);
-        grimoireModal.addEventListener('click', (e) => {
-            if (e.target === grimoireModal) closeGrimoire();
-        });
-
-        clearGrimoireBtn.addEventListener('click', () => {
-            savedIds = [];
-            updateSavedCount();
-            renderGrid();
-            renderGrimoireDrawer();
-            showToast('Your Grimoire has been cleared');
-        });
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                closeDetailModal();
-                closeGrimoire();
-            }
-        });
-
-        // Initial Boot
-        updateSavedCount();
-        renderGrid();
-    </script>
+    // Generate embers continuously
+    setInterval(createEmber, 300);
+    
+    // Initial burst
+    for(let i=0; i<20; i++) {
+      setTimeout(createEmber, Math.random() * 2000);
+    }
+  </script>
 </body>
 </html>
