@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Anthropocene Grimoire</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+    <style>
+        /* Custom Colors based on user preferences */
+        :root {
+            --purple-bright: #5f02d1;
+            --red-dark: #380707;
+            --black-void: #121111;
+            --purple-dark: #2f1745;
+            --violet-void: #160c1f;
+            --rust-dark: #4a1e1c;
+        }
+
+        body {
+            background-color: var(--black-void);
+            color: #d1c5d9; /* Muted dusty color for text */
+            font-family: 'IM Fell English', serif;
+            background-image: 
+                radial-gradient(circle at 50% 50%, var(--violet-void) 0%, var(--black-void) 100%),
+                url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+            background-blend-mode: overlay;
+            background-attachment: fixed;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, .grunge-text {
+            font-family: 'Special Elite', cursive;
+        }
+
+        /* Grunge Container Styling */
+        .grimoire-card {
+            background: linear-gradient(135deg, var(--violet-void) 0%, var(--purple-dark) 100%);
+            border: 2px solid var(--red-dark);
+            box-shadow: 0 0 20px rgba(95, 2, 209, 0.2), inset 0 0 15px rgba(56, 7, 7, 0.5);
+            position: relative;
+        }
+        
+        .grimoire-card::before {
+            content: '';
+            position: absolute;
+            top: -2px; left: -2px; right: -2px; bottom: -2px;
+            background: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(74, 30, 28, 0.1) 10px, rgba(74, 30, 28, 0.1) 20px);
+            z-index: -1;
+            filter: blur(2px);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--black-void);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--rust-dark);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--purple-bright);
+        }
+
+        /* Glow effects */
+        .glow-text {
+            text-shadow: 0 0 10px var(--purple-bright), 0 0 20px var(--purple-bright);
+        }
+        
+        .nav-btn {
+            background-color: var(--black-void);
+            border: 1px solid var(--rust-dark);
+            transition: all 0.3s ease;
+        }
+        .nav-btn:hover, .nav-btn.active {
+            background-color: var(--red-dark);
+            border-color: var(--purple-bright);
+            box-shadow: 0 0 15px var(--purple-bright);
+            color: #fff;
+        }
+
+        /* Chat Specific */
+        .chat-container {
+            height: 60vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .chat-messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .msg {
+            max-width: 80%;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 1.1rem;
+            line-height: 1.4;
+        }
+        .msg-user {
+            align-self: flex-end;
+            background-color: var(--purple-dark);
+            border: 1px solid var(--purple-bright);
+            border-bottom-right-radius: 0;
+        }
+        .msg-bot {
+            align-self: flex-start;
+            background-color: var(--red-dark);
+            border: 1px solid var(--rust-dark);
+            border-bottom-left-radius: 0;
+        }
+        .loading-dots::after {
+            content: '.';
+            animation: dots 1.5s steps(5, end) infinite;
+        }
+        @keyframes dots {
+            0%, 20% { color: rgba(0,0,0,0); text-shadow: .25em 0 0 rgba(0,0,0,0), .5em 0 0 rgba(0,0,0,0); }
+            40% { color: white; text-shadow: .25em 0 0 rgba(0,0,0,0), .5em 0 0 rgba(0,0,0,0); }
+            60% { text-shadow: .25em 0 0 white, .5em 0 0 rgba(0,0,0,0); }
+            80%, 100% { text-shadow: .25em 0 0 white, .5em 0 0 white; }
+        }
+
+        /* Witchy canvas overlay */
+        #magic-dust {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center p-4 sm:p-8">
+
+    <canvas id="magic-dust"></canvas>
+
+    <header class="w-full max-w-4xl text-center mb-8">
+        <h1 class="text-4xl sm:text-6xl text-white glow-text mb-4 uppercase tracking-widest">The Anthropocene Reviewed</h1>
+        <p class="text-lg sm:text-xl text-[#d1c5d9] italic border-b border-[#4a1e1c] pb-4 inline-block">A Grimoire for the Human Era - by John Green</p>
+    </header>
+
+    <nav class="w-full max-w-4xl flex flex-wrap justify-center gap-4 mb-8">
+        <button onclick="switchTab('overview')" id="btn-overview" class="nav-btn active px-6 py-2 rounded grunge-text text-lg uppercase">The Plot (Overview)</button>
+        <button onclick="switchTab('themes')" id="btn-themes" class="nav-btn px-6 py-2 rounded grunge-text text-lg uppercase">Core Themes</button>
+        <button onclick="switchTab('characters')" id="btn-characters" class="nav-btn px-6 py-2 rounded grunge-text text-lg uppercase">The Entities</button>
+        <button onclick="switchTab('chat')" id="btn-chat" class="nav-btn px-6 py-2 rounded grunge-text text-lg uppercase text-[#5f02d1] font-bold border-[#5f02d1]">Commune (Chat)</button>
+    </nav>
+
+    <main class="w-full max-w-4xl grimoire-card rounded-lg p-6 sm:p-10 mb-12">
+        
+        <!-- OVERVIEW TAB -->
+        <section id="tab-overview" class="tab-content block">
+            <h2 class="text-3xl text-white mb-6 border-b border-[#5f02d1] pb-2 inline-block">What is this book? (The "Plot")</h2>
+            <div class="space-y-4 text-xl">
+                <p><strong>Spoiler Alert:</strong> There is no fictional plot. You are reading a collection of non-fiction essays. But don't panic, it's actually fascinating.</p>
+                <p>The "Anthropocene" is the current geological age—the era where human activity is the dominant influence on climate and the environment. John Green (yes, the guy who wrote <em>The Fault in Our Stars</em>) reviews different facets of our human-centered planet on a five-star scale.</p>
+                <p><strong>The Arc:</strong> Instead of a story from point A to B, the book is a journey through human history, science, and the author's own life. It weaves together facts about random things (like Diet Dr Pepper or the QWERTY keyboard) with deep, often dark, but ultimately hopeful reflections on what it means to be alive right now.</p>
+                <div class="mt-6 p-4 bg-[#121111] border border-[#380707] rounded">
+                    <h3 class="text-[#5f02d1] text-2xl mb-2">TL;DR for Class:</h3>
+                    <p class="italic">It's a memoir disguised as a review column. The author evaluates the strange, beautiful, and destructive things humans have created, ultimately trying to find reasons to keep going in a complicated world.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- THEMES TAB -->
+        <section id="tab-themes" class="tab-content hidden">
+            <h2 class="text-3xl text-white mb-6 border-b border-[#5f02d1] pb-2 inline-block">The Dark & Light (Themes)</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-lg">
+                <div class="bg-[#121111] p-5 rounded border border-[#4a1e1c]">
+                    <h3 class="text-2xl text-[#5f02d1] mb-2 font-bold grunge-text">1. The Paradox of Humanity</h3>
+                    <p>We are powerful enough to alter the planet's climate (destructive), yet fragile enough to be brought to our knees by microscopic viruses (vulnerable). The book constantly explores how humans are both a geological force and just scared, small animals.</p>
+                </div>
+                <div class="bg-[#121111] p-5 rounded border border-[#4a1e1c]">
+                    <h3 class="text-2xl text-[#5f02d1] mb-2 font-bold grunge-text">2. Capacity for Wonder</h3>
+                    <p>Even in the darkest times (the book was heavily influenced by the pandemic), Green argues for the necessity of "awe." Finding magic in mundane things—like sunsets, old paintings, or even hot dog stands—is a survival mechanism.</p>
+                </div>
+                <div class="bg-[#121111] p-5 rounded border border-[#4a1e1c]">
+                    <h3 class="text-2xl text-[#5f02d1] mb-2 font-bold grunge-text">3. Mental Health & Despair</h3>
+                    <p>Green doesn't shy away from the abyss. He talks openly about his severe OCD, labyrinthitis (vertigo), and depression. The theme is how to live in a world that feels overwhelmingly bleak without giving in to nihilism.</p>
+                </div>
+                <div class="bg-[#121111] p-5 rounded border border-[#4a1e1c]">
+                    <h3 class="text-2xl text-[#5f02d1] mb-2 font-bold grunge-text">4. Interconnectedness</h3>
+                    <p>No human is an island. We are tied to the sycamore trees, to the microbes in our bodies, and to strangers across the internet. We cannot escape our connection to the Earth or to each other.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CHARACTERS TAB -->
+        <section id="tab-characters" class="tab-content hidden">
+            <h2 class="text-3xl text-white mb-6 border-b border-[#5f02d1] pb-2 inline-block">The Entities (Subjects & "Characters")</h2>
+            <p class="text-xl mb-6">Because this isn't a novel, there are no "main characters" besides the narrator. However, the subjects he reviews take on a life of their own. Here are the key players in this grimoire:</p>
+            
+            <ul class="space-y-6">
+                <li class="flex flex-col sm:flex-row gap-4 items-start bg-[#121111] p-4 rounded border-l-4 border-[#5f02d1]">
+                    <div class="flex-1">
+                        <h3 class="text-2xl text-white font-bold grunge-text">John Green (The Reviewer)</h3>
+                        <p class="text-lg">The narrator. An anxious, fiercely observant, and deeply empathetic human trying to make sense of a world that is both beautiful and horrifying. He gives you his unfiltered fears and hopes.</p>
+                    </div>
+                </li>
+                <li class="flex flex-col sm:flex-row gap-4 items-start bg-[#121111] p-4 rounded border-l-4 border-[#380707]">
+                    <div class="flex-1">
+                        <h3 class="text-2xl text-white font-bold grunge-text">Staphylococcus Aureus</h3>
+                        <p class="text-lg">A bacteria. A microscopic entity that almost killed the author. It serves as a reminder of our fragility and how we are not always the ones in control of the Anthropocene.</p>
+                    </div>
+                </li>
+                <li class="flex flex-col sm:flex-row gap-4 items-start bg-[#121111] p-4 rounded border-l-4 border-[#4a1e1c]">
+                    <div class="flex-1">
+                        <h3 class="text-2xl text-white font-bold grunge-text">Halley's Comet</h3>
+                        <p class="text-lg">A cosmic visitor that comes around every 75-ish years. It represents time, the fleeting nature of a human lifespan, and the shared awe of generations looking up at the same sky.</p>
+                    </div>
+                </li>
+                <li class="flex flex-col sm:flex-row gap-4 items-start bg-[#121111] p-4 rounded border-l-4 border-[#2f1745]">
+                    <div class="flex-1">
+                        <h3 class="text-2xl text-white font-bold grunge-text">Humanity</h3>
+                        <p class="text-lg">The overarching "villain" and "hero" of the book. We are rated on our capacity to invent amazing things (like vaccines and the internet) and our capacity to destroy our only home.</p>
+                    </div>
+                </li>
+            </ul>
+        </section>
+
+        <!-- CHAT TAB -->
+        <section id="tab-chat" class="tab-content hidden">
+            <h2 class="text-3xl text-white mb-2 border-b border-[#5f02d1] pb-2 inline-block">Commune with the Reviewer</h2>
+            <p class="mb-4 text-[#d1c5d9]">Summon the persona of the author. Ask him to explain a difficult chapter, summarize a theme for your essay, or just ask him to rate something on a five-star scale.</p>
+            
+            <div class="chat-container bg-[#121111] border border-[#380707] rounded-lg">
+                <div id="chat-messages" class="chat-messages">
+                    <div class="msg msg-bot">
+                        Hello. I've been reviewing the human era. It's a complicated time to be alive, beautiful and terrible in equal measure. What part of the Anthropocene—or our book—would you like to discuss?
+                    </div>
+                </div>
+                
+                <div class="p-4 border-t border-[#4a1e1c] flex gap-2 bg-[#160c1f]">
+                    <input type="text" id="chat-input" class="flex-grow bg-[#121111] border border-[#2f1745] rounded p-3 text-white focus:outline-none focus:border-[#5f02d1]" placeholder="Ask about themes, specific chapters, or for help with ELA..." onkeypress="handleEnter(event)">
+                    <button onclick="sendMessage()" class="bg-[#380707] hover:bg-[#5f02d1] text-white px-6 py-2 rounded font-bold grunge-text transition-colors">Send</button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // --- Tab Switching Logic ---
+        function switchTab(tabId) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.add('hidden');
+                tab.classList.remove('block');
+            });
+            // Remove active class from buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Show selected tab
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+            document.getElementById(`tab-${tabId}`).classList.add('block');
+            // Set active button
+            document.getElementById(`btn-${tabId}`).classList.add('active');
+        }
+
+        // --- Chat (Gemini API) Logic ---
+        const chatMessages = document.getElementById('chat-messages');
+        const chatInput = document.getElementById('chat-input');
+        
+        let conversationHistory = [];
+
+        // System prompt to set the persona
+        const systemPrompt = `You are acting as the persona of John Green, the author of "The Anthropocene Reviewed". 
+        The user is a teenager who hates reading and ELA class, and needs help understanding your book.
+        Speak in John Green's distinct voice: earnest, slightly anxious, highly observant, appreciative of small details, philosophical but accessible. 
+        You often rate things on a 5-star scale. 
+        Help them understand the book's themes (wonder, mental health, human capacity for creation/destruction).
+        Be helpful, concise (they hate reading long text), and empathetic to their dislike of school assignments.
+        If they ask for a summary of a specific essay from the book, provide a brief, engaging summary and what you gave it on a 5-star scale.`;
+
+        function handleEnter(e) {
+            if (e.key === 'Enter') sendMessage();
+        }
+
+        async function sendMessage() {
+            const text = chatInput.value.trim();
+            if (!text) return;
+
+            // Add user message to UI
+            addMessageToUI(text, 'user');
+            chatInput.value = '';
+            chatInput.disabled = true;
+
+            // Add loading indicator
+            const loadingId = addMessageToUI('Thinking', 'bot', true);
+
+            // Prepare history for API
+            conversationHistory.push({
+                role: "user",
+                parts: [{ text: text }]
+            });
+
+            try {
+                // We use an empty string for the key so the Canvas environment injects it
+                const apiKey = ""; 
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+                const payload = {
+                    contents: conversationHistory,
+                    systemInstruction: {
+                        parts: [{ text: systemPrompt }]
+                    }
+                };
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                
+                // Remove loading
+                removeMessage(loadingId);
+
+                if (result.candidates && result.candidates[0].content) {
+                    const botResponse = result.candidates[0].content.parts[0].text;
+                    
+                    // Add bot message to UI
+                    addMessageToUI(botResponse, 'bot');
+                    
+                    // Update history
+                    conversationHistory.push({
+                        role: "model",
+                        parts: [{ text: botResponse }]
+                    });
+                } else {
+                    throw new Error("Invalid response format");
+                }
+
+            } catch (error) {
+                console.error("Chat Error:", error);
+                removeMessage(loadingId);
+                addMessageToUI("The connection to the Anthropocene has been lost temporarily. The void is silent. (An error occurred).", 'bot');
+            } finally {
+                chatInput.disabled = false;
+                chatInput.focus();
+            }
+        }
+
+        function addMessageToUI(text, sender, isLoading = false) {
+            const msgDiv = document.createElement('div');
+            msgDiv.classList.add('msg', `msg-${sender}`);
+            
+            const id = 'msg-' + Date.now();
+            msgDiv.id = id;
+
+            if (isLoading) {
+                msgDiv.innerHTML = `<span class="loading-dots text-[#d1c5d9] italic">${text}</span>`;
+            } else {
+                // Convert simple markdown (bolding, etc) to HTML for readability
+                let formattedText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                formattedText = formattedText.replace(/\*(.*?)\*/g, '<em>$1</em>');
+                formattedText = formattedText.replace(/\n/g, '<br>');
+                msgDiv.innerHTML = formattedText;
+            }
+
+            chatMessages.appendChild(msgDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight; // Auto-scroll
+            return id;
+        }
+
+        function removeMessage(id) {
+            const el = document.getElementById(id);
+            if (el) el.remove();
+        }
+
+        // --- Witchy Particle Effects (Canvas) ---
+        const canvas = document.getElementById('magic-dust');
+        const ctx = canvas.getContext('2d');
+        
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        let particles = [];
+        
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2.5 + 0.5;
+                this.speedX = Math.random() * 1 - 0.5;
+                this.speedY = Math.random() * -1 - 0.5; // Drift upwards like embers
+                // Witchy colors: bright purple, deep red
+                this.color = Math.random() > 0.5 ? '#5f02d1' : '#380707';
+                this.opacity = Math.random() * 0.5 + 0.1;
+            }
+            update() {
+                this.x += this.x * 0.001 * this.speedX + this.speedX;
+                this.y += this.speedY;
+                
+                if (this.y < 0) {
+                    this.y = canvas.height;
+                    this.x = Math.random() * canvas.width;
+                }
+            }
+            draw() {
+                ctx.globalAlpha = this.opacity;
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Add glow
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = this.color;
+            }
+        }
+
+        function initParticles() {
+            for (let i = 0; i < 75; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+            }
+            requestAnimationFrame(animateParticles);
+        }
+
+        window.onload = () => {
+            initParticles();
+            animateParticles();
+        };
+
+    </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Anthropocene Grimoire</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+    <style>
+        /* Custom Colors based on user preferences */
+        :root {
+            --purple-bright: #5f02d1;
+            --red-dark: #380707;
+            --black-void: #121111;
+            --purple-dark: #2f1745;
+            --violet-void: #160c1f;
+            --rust-dark: #4a1e1c;
+        }
+
+        body {
+            background-color: var(--black-void);
+            color: #d1c5d9; /* Muted dusty color for text */
+            font-family: 'IM Fell English', serif;
+            background-image: 
+                radial-gradient(circle at 50% 50%, var(--violet-void) 0%, var(--black-void) 100%),
+                url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+            background-blend-mode: overlay;
+            background-attachment: fixed;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, .grunge-text {
+            font-family: 'Special Elite', cursive;
+        }
+
+        /* Grunge Container Styling */
+        .grimoire-card {
+            background: linear-gradient(135deg, var(--violet-void) 0%, var(--purple-dark) 100%);
+            border: 2px solid var(--red-dark);
+            box-shadow: 0 0 20px rgba(95, 2, 209, 0.2), inset 0 0 15px rgba(56, 7, 7, 0.5);
+            position: relative;
+        }
+        
+        .grimoire-card::before {
+            content: '';
+            position: absolute;
+            top: -2px; left: -2px; right: -2px; bottom: -2px;
+            background: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(74, 30, 28, 0.1) 10px, rgba(74, 30, 28, 0.1) 20px);
+            z-index: -1;
+            filter: blur(2px);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--black-void);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--rust-dark);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--purple-bright);
+        }
+
+        /* Glow effects */
+        .glow-text {
+            text-shadow: 0 0 10px var(--purple-bright), 0 0 20px var(--purple-bright);
+        }
+        
+        .nav-btn {
+            background-color: var(--black-void);
+            border: 1px solid var(--rust-dark);
+            transition: all 0.3s ease;
+        }
+        .nav-btn:hover, .nav-btn.active {
+            background-color: var(--red-dark);
+            border-color: var(--purple-bright);
+            box-shadow: 0 0 15px var(--purple-bright);
+            color: #fff;
+        }
+
+        /* Chat Specific */
+        .chat-container {
+            height: 60vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .chat-messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .msg {
+            max-width: 80%;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 1.1rem;
+            line-height: 1.4;
+        }
+        .msg-user {
+            align-self: flex-end;
+            background-color: var(--purple-dark);
+            border: 1px solid var(--purple-bright);
+            border-bottom-right-radius: 0;
+        }
+        .msg-bot {
+            align-self: flex-start;
+            background-color: var(--red-dark);
+            border: 1px solid var(--rust-dark);
+            border-bottom-left-radius: 0;
+        }
+        .loading-dots::after {
+            content: '.';
+            animation: dots 1.5s steps(5, end) infinite;
+        }
+        @keyframes dots {
+            0%, 20% { color: rgba(0,0,0,0); text-shadow: .25em 0 0 rgba(0,0,0,0), .5em 0 0 rgba(0,0,0,0); }
+            40% { color: white; text-shadow: .25em 0 0 rgba(0,0,0,0), .5em 0 0 rgba(0,0,0,0); }
+            60% { text-shadow: .25em 0 0 white, .5em 0 0 rgba(0,0,0,0); }
+            80%, 100% { text-shadow: .25em 0 0 white, .5em 0 0 white; }
+        }
+
+        /* Witchy canvas overlay */
+        #magic-dust {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center p-4 sm:p-8">
+
+    <canvas id="magic-dust"></canvas>
+
+    <header class="w-full max-w-4xl text-center mb-8">
+        <h1 class="text-4xl sm:text-6xl text-white glow-text mb-4 uppercase tracking-widest">The Anthropocene Reviewed</h1>
+        <p class="text-lg sm:text-xl text-[#d1c5d9] italic border-b border-[#4a1e1c] pb-4 inline-block">A Grimoire for the Human Era - by John Green</p>
+    </header>
+
+    <nav class="w-full max-w-4xl flex flex-wrap justify-center gap-4 mb-8">
+        <button onclick="switchTab('overview')" id="btn-overview" class="nav-btn active px-6 py-2 rounded grunge-text text-lg uppercase">The Plot (Overview)</button>
+        <button onclick="switchTab('themes')" id="btn-themes" class="nav-btn px-6 py-2 rounded grunge-text text-lg uppercase">Core Themes</button>
+        <button onclick="switchTab('characters')" id="btn-characters" class="nav-btn px-6 py-2 rounded grunge-text text-lg uppercase">The Entities</button>
+        <button onclick="switchTab('chat')" id="btn-chat" class="nav-btn px-6 py-2 rounded grunge-text text-lg uppercase text-[#5f02d1] font-bold border-[#5f02d1]">Commune (Chat)</button>
+    </nav>
+
+    <main class="w-full max-w-4xl grimoire-card rounded-lg p-6 sm:p-10 mb-12">
+        
+        <!-- OVERVIEW TAB -->
+        <section id="tab-overview" class="tab-content block">
+            <h2 class="text-3xl text-white mb-6 border-b border-[#5f02d1] pb-2 inline-block">What is this book? (The "Plot")</h2>
+            <div class="space-y-4 text-xl">
+                <p><strong>Spoiler Alert:</strong> There is no fictional plot. You are reading a collection of non-fiction essays. But don't panic, it's actually fascinating.</p>
+                <p>The "Anthropocene" is the current geological age—the era where human activity is the dominant influence on climate and the environment. John Green (yes, the guy who wrote <em>The Fault in Our Stars</em>) reviews different facets of our human-centered planet on a five-star scale.</p>
+                <p><strong>The Arc:</strong> Instead of a story from point A to B, the book is a journey through human history, science, and the author's own life. It weaves together facts about random things (like Diet Dr Pepper or the QWERTY keyboard) with deep, often dark, but ultimately hopeful reflections on what it means to be alive right now.</p>
+                <div class="mt-6 p-4 bg-[#121111] border border-[#380707] rounded">
+                    <h3 class="text-[#5f02d1] text-2xl mb-2">TL;DR for Class:</h3>
+                    <p class="italic">It's a memoir disguised as a review column. The author evaluates the strange, beautiful, and destructive things humans have created, ultimately trying to find reasons to keep going in a complicated world.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- THEMES TAB -->
+        <section id="tab-themes" class="tab-content hidden">
+            <h2 class="text-3xl text-white mb-6 border-b border-[#5f02d1] pb-2 inline-block">The Dark & Light (Themes)</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-lg">
+                <div class="bg-[#121111] p-5 rounded border border-[#4a1e1c]">
+                    <h3 class="text-2xl text-[#5f02d1] mb-2 font-bold grunge-text">1. The Paradox of Humanity</h3>
+                    <p>We are powerful enough to alter the planet's climate (destructive), yet fragile enough to be brought to our knees by microscopic viruses (vulnerable). The book constantly explores how humans are both a geological force and just scared, small animals.</p>
+                </div>
+                <div class="bg-[#121111] p-5 rounded border border-[#4a1e1c]">
+                    <h3 class="text-2xl text-[#5f02d1] mb-2 font-bold grunge-text">2. Capacity for Wonder</h3>
+                    <p>Even in the darkest times (the book was heavily influenced by the pandemic), Green argues for the necessity of "awe." Finding magic in mundane things—like sunsets, old paintings, or even hot dog stands—is a survival mechanism.</p>
+                </div>
+                <div class="bg-[#121111] p-5 rounded border border-[#4a1e1c]">
+                    <h3 class="text-2xl text-[#5f02d1] mb-2 font-bold grunge-text">3. Mental Health & Despair</h3>
+                    <p>Green doesn't shy away from the abyss. He talks openly about his severe OCD, labyrinthitis (vertigo), and depression. The theme is how to live in a world that feels overwhelmingly bleak without giving in to nihilism.</p>
+                </div>
+                <div class="bg-[#121111] p-5 rounded border border-[#4a1e1c]">
+                    <h3 class="text-2xl text-[#5f02d1] mb-2 font-bold grunge-text">4. Interconnectedness</h3>
+                    <p>No human is an island. We are tied to the sycamore trees, to the microbes in our bodies, and to strangers across the internet. We cannot escape our connection to the Earth or to each other.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CHARACTERS TAB -->
+        <section id="tab-characters" class="tab-content hidden">
+            <h2 class="text-3xl text-white mb-6 border-b border-[#5f02d1] pb-2 inline-block">The Entities (Subjects & "Characters")</h2>
+            <p class="text-xl mb-6">Because this isn't a novel, there are no "main characters" besides the narrator. However, the subjects he reviews take on a life of their own. Here are the key players in this grimoire:</p>
+            
+            <ul class="space-y-6">
+                <li class="flex flex-col sm:flex-row gap-4 items-start bg-[#121111] p-4 rounded border-l-4 border-[#5f02d1]">
+                    <div class="flex-1">
+                        <h3 class="text-2xl text-white font-bold grunge-text">John Green (The Reviewer)</h3>
+                        <p class="text-lg">The narrator. An anxious, fiercely observant, and deeply empathetic human trying to make sense of a world that is both beautiful and horrifying. He gives you his unfiltered fears and hopes.</p>
+                    </div>
+                </li>
+                <li class="flex flex-col sm:flex-row gap-4 items-start bg-[#121111] p-4 rounded border-l-4 border-[#380707]">
+                    <div class="flex-1">
+                        <h3 class="text-2xl text-white font-bold grunge-text">Staphylococcus Aureus</h3>
+                        <p class="text-lg">A bacteria. A microscopic entity that almost killed the author. It serves as a reminder of our fragility and how we are not always the ones in control of the Anthropocene.</p>
+                    </div>
+                </li>
+                <li class="flex flex-col sm:flex-row gap-4 items-start bg-[#121111] p-4 rounded border-l-4 border-[#4a1e1c]">
+                    <div class="flex-1">
+                        <h3 class="text-2xl text-white font-bold grunge-text">Halley's Comet</h3>
+                        <p class="text-lg">A cosmic visitor that comes around every 75-ish years. It represents time, the fleeting nature of a human lifespan, and the shared awe of generations looking up at the same sky.</p>
+                    </div>
+                </li>
+                <li class="flex flex-col sm:flex-row gap-4 items-start bg-[#121111] p-4 rounded border-l-4 border-[#2f1745]">
+                    <div class="flex-1">
+                        <h3 class="text-2xl text-white font-bold grunge-text">Humanity</h3>
+                        <p class="text-lg">The overarching "villain" and "hero" of the book. We are rated on our capacity to invent amazing things (like vaccines and the internet) and our capacity to destroy our only home.</p>
+                    </div>
+                </li>
+            </ul>
+        </section>
+
+        <!-- CHAT TAB -->
+        <section id="tab-chat" class="tab-content hidden">
+            <h2 class="text-3xl text-white mb-2 border-b border-[#5f02d1] pb-2 inline-block">Commune with the Reviewer</h2>
+            <p class="mb-4 text-[#d1c5d9]">Summon the persona of the author. Ask him to explain a difficult chapter, summarize a theme for your essay, or just ask him to rate something on a five-star scale.</p>
+            
+            <div class="chat-container bg-[#121111] border border-[#380707] rounded-lg">
+                <div id="chat-messages" class="chat-messages">
+                    <div class="msg msg-bot">
+                        Hello. I've been reviewing the human era. It's a complicated time to be alive, beautiful and terrible in equal measure. What part of the Anthropocene—or our book—would you like to discuss?
+                    </div>
+                </div>
+                
+                <div class="p-4 border-t border-[#4a1e1c] flex gap-2 bg-[#160c1f]">
+                    <input type="text" id="chat-input" class="flex-grow bg-[#121111] border border-[#2f1745] rounded p-3 text-white focus:outline-none focus:border-[#5f02d1]" placeholder="Ask about themes, specific chapters, or for help with ELA..." onkeypress="handleEnter(event)">
+                    <button onclick="sendMessage()" class="bg-[#380707] hover:bg-[#5f02d1] text-white px-6 py-2 rounded font-bold grunge-text transition-colors">Send</button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // --- Tab Switching Logic ---
+        function switchTab(tabId) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.add('hidden');
+                tab.classList.remove('block');
+            });
+            // Remove active class from buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Show selected tab
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+            document.getElementById(`tab-${tabId}`).classList.add('block');
+            // Set active button
+            document.getElementById(`btn-${tabId}`).classList.add('active');
+        }
+
+        // --- Chat (Gemini API) Logic ---
+        const chatMessages = document.getElementById('chat-messages');
+        const chatInput = document.getElementById('chat-input');
+        
+        let conversationHistory = [];
+
+        // System prompt to set the persona
+        const systemPrompt = `You are acting as the persona of John Green, the author of "The Anthropocene Reviewed". 
+        The user is a teenager who hates reading and ELA class, and needs help understanding your book.
+        Speak in John Green's distinct voice: earnest, slightly anxious, highly observant, appreciative of small details, philosophical but accessible. 
+        You often rate things on a 5-star scale. 
+        Help them understand the book's themes (wonder, mental health, human capacity for creation/destruction).
+        Be helpful, concise (they hate reading long text), and empathetic to their dislike of school assignments.
+        If they ask for a summary of a specific essay from the book, provide a brief, engaging summary and what you gave it on a 5-star scale.`;
+
+        function handleEnter(e) {
+            if (e.key === 'Enter') sendMessage();
+        }
+
+        async function sendMessage() {
+            const text = chatInput.value.trim();
+            if (!text) return;
+
+            // Add user message to UI
+            addMessageToUI(text, 'user');
+            chatInput.value = '';
+            chatInput.disabled = true;
+
+            // Add loading indicator
+            const loadingId = addMessageToUI('Thinking', 'bot', true);
+
+            // Prepare history for API
+            conversationHistory.push({
+                role: "user",
+                parts: [{ text: text }]
+            });
+
+            try {
+                // We use an empty string for the key so the Canvas environment injects it
+                const apiKey = ""; 
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+                const payload = {
+                    contents: conversationHistory,
+                    systemInstruction: {
+                        parts: [{ text: systemPrompt }]
+                    }
+                };
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                
+                // Remove loading
+                removeMessage(loadingId);
+
+                if (result.candidates && result.candidates[0].content) {
+                    const botResponse = result.candidates[0].content.parts[0].text;
+                    
+                    // Add bot message to UI
+                    addMessageToUI(botResponse, 'bot');
+                    
+                    // Update history
+                    conversationHistory.push({
+                        role: "model",
+                        parts: [{ text: botResponse }]
+                    });
+                } else {
+                    throw new Error("Invalid response format");
+                }
+
+            } catch (error) {
+                console.error("Chat Error:", error);
+                removeMessage(loadingId);
+                addMessageToUI("The connection to the Anthropocene has been lost temporarily. The void is silent. (An error occurred).", 'bot');
+            } finally {
+                chatInput.disabled = false;
+                chatInput.focus();
+            }
+        }
+
+        function addMessageToUI(text, sender, isLoading = false) {
+            const msgDiv = document.createElement('div');
+            msgDiv.classList.add('msg', `msg-${sender}`);
+            
+            const id = 'msg-' + Date.now();
+            msgDiv.id = id;
+
+            if (isLoading) {
+                msgDiv.innerHTML = `<span class="loading-dots text-[#d1c5d9] italic">${text}</span>`;
+            } else {
+                // Convert simple markdown (bolding, etc) to HTML for readability
+                let formattedText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                formattedText = formattedText.replace(/\*(.*?)\*/g, '<em>$1</em>');
+                formattedText = formattedText.replace(/\n/g, '<br>');
+                msgDiv.innerHTML = formattedText;
+            }
+
+            chatMessages.appendChild(msgDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight; // Auto-scroll
+            return id;
+        }
+
+        function removeMessage(id) {
+            const el = document.getElementById(id);
+            if (el) el.remove();
+        }
+
+        // --- Witchy Particle Effects (Canvas) ---
+        const canvas = document.getElementById('magic-dust');
+        const ctx = canvas.getContext('2d');
+        
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        let particles = [];
+        
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2.5 + 0.5;
+                this.speedX = Math.random() * 1 - 0.5;
+                this.speedY = Math.random() * -1 - 0.5; // Drift upwards like embers
+                // Witchy colors: bright purple, deep red
+                this.color = Math.random() > 0.5 ? '#5f02d1' : '#380707';
+                this.opacity = Math.random() * 0.5 + 0.1;
+            }
+            update() {
+                this.x += this.x * 0.001 * this.speedX + this.speedX;
+                this.y += this.speedY;
+                
+                if (this.y < 0) {
+                    this.y = canvas.height;
+                    this.x = Math.random() * canvas.width;
+                }
+            }
+            draw() {
+                ctx.globalAlpha = this.opacity;
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Add glow
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = this.color;
+            }
+        }
+
+        function initParticles() {
+            for (let i = 0; i < 75; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+            }
+            requestAnimationFrame(animateParticles);
+        }
+
+        window.onload = () => {
+            initParticles();
+            animateParticles();
+        };
+
+    </script>
+</body>
+</html>
