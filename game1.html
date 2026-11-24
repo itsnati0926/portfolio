@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vamos</title>
+    <style>
+        /* Grunge & Goth Aesthetics */
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #030100; /* Deep Void Black */
+            background-image: radial-gradient(circle at center, #030100 0%, #000000 100%);
+            color: #7502d9; /* Vivid Purple */
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            font-size: 3rem;
+            color: #7502d9;
+            text-shadow: 3px 3px 0px #420b09, 0 0 20px #7502d9;
+            margin-bottom: 10px;
+            letter-spacing: 10px;
+            border-bottom: 2px solid #002101;
+            padding-bottom: 5px;
+        }
+
+        #game-container {
+            position: relative;
+            box-shadow: 0 0 30px #420b09, inset 0 0 20px #030100;
+            border: 4px solid #002101;
+            border-radius: 2px;
+            background-color: #030100;
+        }
+
+        canvas {
+            display: block;
+        }
+
+        /* Grunge scanline effect */
+        .scanlines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.4));
+            background-size: 100% 4px;
+            pointer-events: none;
+            opacity: 0.8;
+        }
+
+        #homeBtn {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background-color: #030100;
+            color: #7502d9;
+            border: 2px solid #420b09;
+            padding: 5px 12px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 10;
+            display: none; /* hidden by default */
+            box-shadow: 0 0 8px #7502d9, inset 0 0 5px #420b09;
+            text-shadow: 1px 1px #000;
+            letter-spacing: 1px;
+            transition: all 0.2s ease-in-out;
+        }
+
+        #homeBtn:hover {
+            background-color: #420b09;
+            color: #eaf5bf;
+            box-shadow: 0 0 12px #eaf5bf;
+            border-color: #7502d9;
+        }
+
+        #instructions {
+            margin-top: 15px;
+            color: #420b09;
+            font-size: 1rem;
+            font-weight: bold;
+            text-shadow: 1px 1px #000;
+            letter-spacing: 2px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>vamos</h1>
+    
+    <div id="game-container">
+        <canvas id="gameCanvas" width="400" height="600"></canvas>
+        <div class="scanlines"></div>
+        <button id="homeBtn">[ HOME ]</button>
+    </div>
+
+    <div id="instructions">
+        [1-5] SET LEVEL // [SPACE] TO FLY // BEAT 999
+    </div>
+
+    <script>
+        // ==========================================
+        // ⚙️ GAME TWEAK VARIABLES (Edit these!) ⚙️
+        // ==========================================
+        const JUMP_STRENGTH = -7.0;    // Upward force when pressing space
+        const GRAVITY = 0.45;          // Downward pull per frame
+        const WIN_SCORE = 999;         // Score required to beat the game
+
+        // Difficulty Settings
+        const LEVELS = {
+            EASY:       { pipeSpeed: 2.5, spawnRate: 130, pipeGap: 180 },
+            MEDIUM:     { pipeSpeed: 3.5, spawnRate: 100, pipeGap: 150 },
+            HARD:       { pipeSpeed: 5.0, spawnRate: 75,  pipeGap: 120 },
+            EXTRA_HARD: { pipeSpeed: 6.5, spawnRate: 60,  pipeGap: 100 },
+            EXTREME:    { pipeSpeed: 8.0, spawnRate: 45,  pipeGap: 80 }
+        };
+        let activeLevel = "MEDIUM"; // Default starting level
+        // ==========================================
+
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+        const homeBtn = document.getElementById("homeBtn");
+
+        // Requested Palette
+        const COLOR_BG = "#030100";
+        const COLOR_PLAYER = "#7502d9";
+        const COLOR_PIPE = "#420b09";
+        const COLOR_GROUND_AURA = "#002101";
+        const COLOR_STAR = "#eaf5bf";
+        const COLOR_FLAME = "#0815a6";
+
+        // Generate Background Stars
+        const stars = [];
+        const NUM_STARS = 75;
+        // The canvas is 400x600, so we spawn them across that area
+        for(let i = 0; i < NUM_STARS; i++) {
+            stars.push({
+                x: Math.random() * 400, 
+                y: Math.random() * 600,
+                radius: Math.random() * 1.5 + 0.5,
+                speed: Math.random() * 0.5 + 0.1
+            });
+        }
+
+        let frames = 0;
+        let score = 0;
+        let gameState = "START"; // States: START, PLAYING, GAMEOVER, WIN
+
+        const player = {
+            x: 80,
+            y: canvas.height / 2,
+            radius: 14,
+            velocity: 0,
+            
+            draw() {
+                let d = this.radius;
+
+                // Draw deep blue gothic flames (flickering behind the heart)
+                let f1 = Math.random() * 6; // random flicker amount
+                let f2 = Math.random() * 10;
+                let f3 = Math.random() * 6;
+
+                ctx.beginPath();
+                ctx.moveTo(this.x - d * 0.8, this.y); // start inside mid-left
+                ctx.lineTo(this.x - d * 0.6, this.y + d * 1.5 + f1); // Left flame tip
+                ctx.lineTo(this.x - d * 0.2, this.y + d * 0.8);      // Inner groove
+                ctx.lineTo(this.x,           this.y + d * 2.2 + f2); // Center long flame tip
+                ctx.lineTo(this.x + d * 0.2, this.y + d * 0.8);      // Inner groove
+                ctx.lineTo(this.x + d * 0.6, this.y + d * 1.5 + f3); // Right flame tip
+                ctx.lineTo(this.x + d * 0.8, this.y); // end inside mid-right
+                ctx.closePath();
+                
+                ctx.fillStyle = COLOR_FLAME;
+                ctx.shadowBlur = 15;
+                ctx.shadowColor = COLOR_FLAME;
+                ctx.fill();
+                
+                ctx.shadowBlur = 0; // reset for the heart
+
+                // Outer glowing heart
+                ctx.beginPath();
+                ctx.moveTo(this.x, this.y - d * 0.2);
+                ctx.bezierCurveTo(this.x + d * 0.8, this.y - d * 1.2, this.x + d * 1.6, this.y - d * 0.2, this.x, this.y + d * 1.2);
+                ctx.bezierCurveTo(this.x - d * 1.6, this.y - d * 0.2, this.x - d * 0.8, this.y - d * 1.2, this.x, this.y - d * 0.2);
+                
+                ctx.fillStyle = COLOR_PLAYER;
+                ctx.shadowBlur = 20;
+                ctx.shadowColor = COLOR_PLAYER;
+                ctx.fill();
+                
+                // Dark inner core (smaller heart)
+                let innerD = d * 0.5;
+                ctx.beginPath();
+                ctx.moveTo(this.x, this.y - innerD * 0.2);
+                ctx.bezierCurveTo(this.x + innerD * 0.8, this.y - innerD * 1.2, this.x + innerD * 1.6, this.y - innerD * 0.2, this.x, this.y + innerD * 1.2);
+                ctx.bezierCurveTo(this.x - innerD * 1.6, this.y - innerD * 0.2, this.x - innerD * 0.8, this.y - innerD * 1.2, this.x, this.y - innerD * 0.2);
+                
+                ctx.fillStyle = COLOR_BG;
+                ctx.fill();
+                
+                ctx.shadowBlur = 0; // reset blur for other elements
+            },
+            
+            update() {
+                this.velocity += GRAVITY;
+                this.y += this.velocity;
+                
+                // Floor and Ceiling collision (Death)
+                if (this.y + this.radius >= canvas.height || this.y - this.radius <= 0) {
+                    gameState = "GAMEOVER";
+                }
+            },
+            
+            jump() {
+                this.velocity = JUMP_STRENGTH;
+            }
+        };
+
+        const pipes = [];
+
+        function spawnPipe() {
+            let minPipeHeight = 60;
+            let gap = LEVELS[activeLevel].pipeGap;
+            let maxPipeHeight = canvas.height - gap - minPipeHeight;
+            let topPipeHeight = Math.floor(Math.random() * (maxPipeHeight - minPipeHeight + 1) + minPipeHeight);
+            
+            pipes.push({
+                x: canvas.width,
+                topHeight: topPipeHeight,
+                bottomY: topPipeHeight + gap,
+                width: 70,
+                passed: false
+            });
+        }
+
+        function drawPipes() {
+            pipes.forEach(pipe => {
+                ctx.fillStyle = COLOR_BG;
+                ctx.strokeStyle = COLOR_PIPE;
+                ctx.lineWidth = 6;
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = COLOR_PIPE;
+                
+                // Top Pipe (Gothic Pillar look)
+                ctx.fillRect(pipe.x, 0, pipe.width, pipe.topHeight);
+                ctx.strokeRect(pipe.x, 0, pipe.width, pipe.topHeight);
+                
+                // Bottom Pipe
+                ctx.fillRect(pipe.x, pipe.bottomY, pipe.width, canvas.height - pipe.bottomY);
+                ctx.strokeRect(pipe.x, pipe.bottomY, pipe.width, canvas.height - pipe.bottomY);
+                
+                ctx.shadowBlur = 0; // Reset
+            });
+        }
+
+        function updatePipes() {
+            for (let i = 0; i < pipes.length; i++) {
+                let p = pipes[i];
+                p.x -= LEVELS[activeLevel].pipeSpeed;
+
+                // Hitbox calculations (using circle-to-rectangle approximation)
+                let px = player.x;
+                let py = player.y;
+                let pr = player.radius - 2; // slightly forgiving hitbox
+
+                let hitTop = px + pr > p.x && px - pr < p.x + p.width && py - pr < p.topHeight;
+                let hitBottom = px + pr > p.x && px - pr < p.x + p.width && py + pr > p.bottomY;
+
+                // Lose condition: hitting a pipe
+                if (hitTop || hitBottom) {
+                    gameState = "GAMEOVER";
+                }
+
+                // Win/Score condition
+                if (p.x + p.width < player.x && !p.passed) {
+                    score++;
+                    p.passed = true;
+                    if (score >= WIN_SCORE) {
+                        gameState = "WIN";
+                    }
+                }
+            }
+
+            // Remove pipes that went off screen
+            if (pipes.length > 0 && pipes[0].x + pipes[0].width < 0) {
+                pipes.shift();
+            }
+        }
+
+        function resetGame() {
+            player.y = canvas.height / 2;
+            player.velocity = 0;
+            pipes.length = 0;
+            score = 0;
+            frames = 0;
+            gameState = "PLAYING";
+        }
+
+        function drawText(text, x, y, size = "30px", color = COLOR_PLAYER) {
+            ctx.fillStyle = color;
+            ctx.font = `bold ${size} 'Courier New', Courier, monospace`;
+            ctx.textAlign = "center";
+            ctx.shadowBlur = 5;
+            ctx.shadowColor = color;
+            ctx.fillText(text, x, y);
+            ctx.shadowBlur = 0;
+        }
+
+        function drawBackground() {
+            // Fill deep void background
+            ctx.fillStyle = COLOR_BG;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Draw and Update Stars
+            ctx.fillStyle = COLOR_STAR;
+            ctx.shadowBlur = 5;
+            ctx.shadowColor = COLOR_STAR;
+            stars.forEach(star => {
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Slowly drift stars left if game is active
+                if (gameState === "PLAYING") {
+                    star.x -= star.speed;
+                    // Wrap stars back to the right side if they go off screen
+                    if (star.x < 0) {
+                        star.x = canvas.width;
+                        star.y = Math.random() * canvas.height;
+                    }
+                }
+            });
+            ctx.shadowBlur = 0; // Reset shadow for next elements
+
+            // Dark green aura at the bottom
+            ctx.fillStyle = COLOR_GROUND_AURA;
+            ctx.globalAlpha = 0.3;
+            ctx.fillRect(0, canvas.height - 40, canvas.width, 40);
+            ctx.globalAlpha = 1.0;
+        }
+
+        function gameLoop() {
+            drawBackground();
+
+            // Toggle Home Button visibility based on game state
+            if (gameState === "GAMEOVER" || gameState === "WIN") {
+                homeBtn.style.display = "block";
+            } else {
+                homeBtn.style.display = "none";
+            }
+
+            if (gameState === "START") {
+                drawText("VAMOS", canvas.width/2, canvas.height/2 - 100, "50px", COLOR_PLAYER);
+                
+                // Difficulty Selection
+                drawText("SELECT LEVEL (PRESS 1-5)", canvas.width/2, canvas.height/2 - 35, "14px", COLOR_GROUND_AURA);
+                
+                let easyColor = activeLevel === "EASY" ? COLOR_PLAYER : COLOR_PIPE;
+                let medColor = activeLevel === "MEDIUM" ? COLOR_PLAYER : COLOR_PIPE;
+                let hardColor = activeLevel === "HARD" ? COLOR_PLAYER : COLOR_PIPE;
+                let exHardColor = activeLevel === "EXTRA_HARD" ? COLOR_PLAYER : COLOR_PIPE;
+                let extremeColor = activeLevel === "EXTREME" ? COLOR_PLAYER : COLOR_PIPE;
+
+                drawText("[1] EASY", canvas.width/2, canvas.height/2 - 10, "16px", easyColor);
+                drawText("[2] MEDIUM", canvas.width/2, canvas.height/2 + 15, "16px", medColor);
+                drawText("[3] HARD", canvas.width/2, canvas.height/2 + 40, "16px", hardColor);
+                drawText("[4] EXTRA HARD", canvas.width/2, canvas.height/2 + 65, "16px", exHardColor);
+                drawText("[5] EXTREMELY HARD", canvas.width/2, canvas.height/2 + 90, "16px", extremeColor);
+
+                drawText("PRESS SPACE TO BEGIN", canvas.width/2, canvas.height/2 + 140, "18px", COLOR_PIPE);
+            } 
+            else if (gameState === "PLAYING") {
+                player.update();
+                player.draw();
+                
+                if (frames % LEVELS[activeLevel].spawnRate === 0) spawnPipe();
+                updatePipes();
+                drawPipes();
+
+                drawText(`SCORE: ${score}`, canvas.width / 2, 50, "30px", COLOR_PLAYER);
+                frames++;
+            }
+            else if (gameState === "GAMEOVER") {
+                drawPipes();
+                player.draw();
+                
+                // Dark red/black death overlay
+                ctx.fillStyle = "rgba(3, 1, 0, 0.85)";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                drawText("OBLITERATED", canvas.width/2, canvas.height/2 - 40, "45px", COLOR_PIPE);
+                drawText(`FINAL SCORE: ${score}`, canvas.width/2, canvas.height/2 + 10, "20px", COLOR_PLAYER);
+                drawText("PRESS SPACE TO RESTART", canvas.width/2, canvas.height/2 + 60, "16px", COLOR_GROUND_AURA);
+            }
+            else if (gameState === "WIN") {
+                player.draw();
+                
+                // Witchy green victory overlay
+                ctx.fillStyle = "rgba(0, 33, 1, 0.9)";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                drawText(WIN_SCORE.toString(), canvas.width/2, canvas.height/2 - 60, "60px", COLOR_PLAYER);
+                drawText("GAME BEATEN", canvas.width/2, canvas.height/2, "30px", COLOR_PLAYER);
+                drawText("YOU ARE THE MASTER", canvas.width/2, canvas.height/2 + 40, "18px", COLOR_BG);
+            }
+
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Input Listener
+        window.addEventListener("keydown", (e) => {
+            if (gameState === "START") {
+                if (e.code === "Digit1" || e.code === "Numpad1") activeLevel = "EASY";
+                if (e.code === "Digit2" || e.code === "Numpad2") activeLevel = "MEDIUM";
+                if (e.code === "Digit3" || e.code === "Numpad3") activeLevel = "HARD";
+                if (e.code === "Digit4" || e.code === "Numpad4") activeLevel = "EXTRA_HARD";
+                if (e.code === "Digit5" || e.code === "Numpad5") activeLevel = "EXTREME";
+            }
+
+            if (e.code === "Space") {
+                e.preventDefault(); // prevents page scrolling
+                if (gameState === "START" || gameState === "GAMEOVER" || gameState === "WIN") {
+                    resetGame();
+                } else if (gameState === "PLAYING") {
+                    player.jump();
+                }
+            }
+        });
+
+        // Home Button Click Listener
+        homeBtn.addEventListener("click", () => {
+            gameState = "START";
+            pipes.length = 0; // Clear the obstaclesx
+            player.y = canvas.height / 2; // Reset player position
+            player.velocity = 0;
+            score = 0;
+        });
+
+        // Initialize the game loop
+        window.onload = function() {
+            gameLoop();
+        };
+    </script>
+</body>
+</html>
